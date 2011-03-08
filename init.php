@@ -27,8 +27,8 @@ return $config;
 
 $CONFIG_DEFAULT = array(
                  'urls' => array('URL_ROOT' => '/up/' ),
-                 'paths' => array('__FRAMEWORK_PATH' =>  'application/'),
-                 'searchPaths' => array(__PROTECTED_PATH.'/model/',__PROTECTED_PATH.'/application/',__PROTECTED_PATH.'/modules/'),
+                 'paths' => array('__FRAMEWORK_PATH' =>  'framework/'),
+                 'searchPaths' => array(__PROTECTED_PATH.'/model/',__PROTECTED_PATH.'/framework/',__PROTECTED_PATH.'/modules/'),
 
                                 
                  );
