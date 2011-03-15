@@ -7,8 +7,8 @@
  * To change this template use File | Settings | File Templates.
  */
 
-require_once __FRAMEWORK_PATH . 'baseClass.class.php';
-require_once __FRAMEWORK_PATH . 'controller_base.class.php';
+require_once __FRAMEWORK_PATH . '/baseClass.class.php';
+require_once __FRAMEWORK_PATH . '/controller_base.class.php';
 function addSearchPath($path)
 {
  global $CONFIG;
