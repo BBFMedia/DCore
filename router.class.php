@@ -104,11 +104,7 @@ class router extends baseClass {
         if (is_callable(array($controller, $this->action . 'Action'))) {
             $action = $this->action . 'Action';
         }
-        else
-            if (is_callable(array($controller, $this->action))) {
-                $action = $this->action;
-            }
-            else
+          else
             {
                 $action = 'index';
 
