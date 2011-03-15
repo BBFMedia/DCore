@@ -115,22 +115,20 @@ private $views = array();
  {
  $this->views[$view_type][$view] = $view_path; 
  }
+ function getViewName($name,$viewtype = null)
+ {
+  if (empty($viewtype))
+    $viewtype =  $this->view_type;
+  if (isset($this->views[$view_type][$name]))
+       return $this->views[$view_type][$name];
+  if (isset($this->views['default'][$name]))
+       return $this->views['default'][$name];
+  return $name;
+ }
 function render($name)
  {
-        $view_root =  __PROTECTED_PATH ;
-        $view_info = explode(':',$this->views[$this->view_type][$name]);
-        if (count($view_info) > 1)
-            $view_root =  __PROTECTED_PATH .'plugins/'. $view_info[0];
-            else
-            $view_info[1] = $view_info[0];
-            
-	$path = $view_root . '/views' . '/' .$this->view_type.'/'. $view_info[1] . '.php';
-	if (file_exists($path) == false)
-        	$path = $view_root . '/views/default/'. $view_info[1] . '.php';
-
-	if (file_exists($path) == false)
-        	$path = __PROTECTED_PATH . '/views' . '/' . $this->views['default'][$name] . '.php';
-
+     //   $view_root =  __PROTECTED_PATH ;
+    $path = get_file_path($this->getViewName($name,$this->view_type),'views',$this->view_type);
 	if (file_exists($path) == false)
 	{
 		throw new Exception('Template not found in '. $path);
@@ -138,11 +136,14 @@ function render($name)
 	}
 
 	// Load variables
-	foreach ($this->vars as $key => $value)
-	{
-		$$key = $value;
-	}
-
+    foreach ($this->vars as $key => $value)
+    {
+        $$key = $value;
+    }
+    foreach ($this->registry->_vars as $key => $value)
+    {
+        $$key = $value;
+    }
         //use the buffer to send out the masterpage
         ob_start();
         include ($path);

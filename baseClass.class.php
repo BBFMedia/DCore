@@ -11,8 +11,8 @@ class baseClass
 {
 
 
- /*
- * @the registry
+/**
+ * @var registry
  */
  public $registry;
 

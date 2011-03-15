@@ -10,7 +10,7 @@
   global $CONFIG;
   foreach ($CONFIG['plugins'] as $plugin)
      {
-      include __PROTECTED_PATH .'/plugins/'. $plugin .'/init.php';
+      require_once __PROTECTED_PATH .'/plugins/'. $plugin .'/init.php';
      }
   }
  

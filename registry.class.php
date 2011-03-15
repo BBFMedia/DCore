@@ -8,6 +8,14 @@ Class Registry {
  */
  private $vars = array();
 
+/**
+ * @var template
+ */
+ public $template;
+/**
+ * @var router
+ */
+public $router;
 
  /**
  *
