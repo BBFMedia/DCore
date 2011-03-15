@@ -7,7 +7,8 @@
 *****************************/
 function gatekeeper()
 {
- if (empty($_SESSION['user_id']) )
+    global $registry;
+ if (empty($registry->session->user_id) )
      die('not logged in');
 }
 
@@ -28,9 +29,9 @@ public $usertable = 'users';
  }
  function init()
  {
-        if (!empty($_SESSION['user_id']))
+        if (!empty($this->registry->session->user_id))
         {
-            $this->user_id = $_SESSION['user_id'];
+            $this->user_id = $this->registry->session->user_id;
 
          $sql = 'select * from `'.$this->usertable .'` where id = '.$this->user_id;
          $rs = db::prepare($sql);
@@ -57,7 +58,7 @@ public $usertable = 'users';
      $arr = $rs -> fetch(PDO :: FETCH_ASSOC);
      if (!empty($arr))
      {
-     $_SESSION['user_id'] = $arr['id'];
+     $this->registry->session->user_id = $arr['id'];
      $this->init();
          return   $this->user_id ;
      }
