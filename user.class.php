@@ -17,24 +17,23 @@ class user extends baseClass
  public $_user;
 /**
 * Return true is $group is in $this->groups
-* example : $regestry->user->auth('admin');
+* example : $registry->user->auth('admin');
 * @param string $group 
 * @return boolean 
 */
 function loadActiveUser($class)
-{
-    
+{ 
   $path =  get_plugin_path($class);
 }
 
  function auth($group)
-   {
-    return in_array(  $group,$this->groups);
-   }
- function logout()
+{
+return in_array(  $group,$this->groups);
+}
+
+   function logout()
  {
        setcookie('sdfkjasdvisdgff', false, time()+60*60*24*365, '/');
-  
  }  
 
 }

@@ -182,10 +182,16 @@ class router extends baseClass {
             }
         }
         $index = 2;
-        while(count($parts) > $index +1)
+        while(count($parts) > $index +1)//  /key/value/key/value
         {
          $cc = ('get_'.$parts[$index]) ;
          $this->registry->template->$cc= $parts[$index+1];
+         $index += 2;
+        }
+        foreach($_GET as $key => $item)///?key=value&key=value
+        {
+         $cc = ('get_'.key ) ;
+         $this->registry->template->$cc= $item;
          $index += 2;
         }
         if (empty($this->controller)) {

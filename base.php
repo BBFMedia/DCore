@@ -26,7 +26,7 @@ function get_file_path($filename,$type = '',$view_type='default')
         $view_info = explode(':',$filename);
         if (count($view_info) > 1)
          {
-        $plugpath = __FRAMEWORK_PATH .'core/'. $view_info[0].'/';
+        $plugpath = __FRAMEWORK_PATH .'/core/'. $view_info[0].'/';
         if (!file_exists($plugpath))
             $plugpath = __PROTECTED_PATH .'plugins/'. $view_info[0].'/';
 

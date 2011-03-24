@@ -9,7 +9,7 @@ function gatekeeper()
 {
     global $registry;
  if (empty($registry->session->user_id) )
-     die('not logged in');
+     die('not logged in');  //add a redirect
 }
 
 class simpleDBUser extends user
@@ -41,7 +41,7 @@ public $usertable = 'users';
              echo $sql;
 
              throw new TException('Invalid query: ' . $rs -> errorInfo());
-         }
+        }
 
 
      $arr = $rs -> fetch(PDO :: FETCH_ASSOC);
@@ -58,8 +58,8 @@ public $usertable = 'users';
      $arr = $rs -> fetch(PDO :: FETCH_ASSOC);
      if (!empty($arr))
      {
-     $this->registry->session->user_id = $arr['id'];
-     $this->init();
+         $this->registry->session->user_id = $arr['id'];
+         $this->init();
          return   $this->user_id ;
      }
   return false;
