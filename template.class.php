@@ -54,7 +54,7 @@ rendering a view
  
 standard practice would be the master template would be registered as "masterpage"
 and the content be registered as "contents"
-plus in master controller should be <?php $this->render('contents') ?>
+plus in master controller should be <?php $this->render('contents') 
 
 
 templates has a helper function show($viewname) to set the "contents" view. usually
@@ -75,7 +75,9 @@ Class Template extends baseClass
 private $view_type = 'default'; 
 private $vars = array();
 private $views = array();
-
+private $CSSFiles = array();
+private $JSFiles = array();
+/**
 /**
  *
  * @constructor
@@ -111,30 +113,41 @@ private $views = array();
  {
   $this->view_type =  $viewtype;
  }
+ function addView($view,$view_path,$view_type = 'default')
+ {
+ if ( empty( $this->views[$view_type][$view]))
+    $this->setView($view,$view_path,$view_type);
+    else
+    $this->views[$view_type][$view][] = $view_path; 
+ }
  function setView($view,$view_path,$view_type = 'default')
  {
- $this->views[$view_type][$view] = $view_path; 
+ $this->views[$view_type][$view] = array($view_path); 
  }
- function getViewName($name,$viewtype = null)
+ function getView($name,$view_type = null)
  {
   if (empty($viewtype))
-    $viewtype =  $this->view_type;
+       $view_type =  $this->view_type;
   if (isset($this->views[$view_type][$name]))
-       return $this->views[$view_type][$name];
+       $view =  $this->views[$view_type][$name];
   if (isset($this->views['default'][$name]))
-       return $this->views['default'][$name];
-  return $name;
+       $view =  $this->views['default'][$name];
+  if (empty($view))
+     $view = $name;
+
+  if (is_array($view) )
+        return $view;
+  if (preg_match("/:/",$view) )
+      return array($view);
+      
+   return array();
+
  }
-function render($name)
+function render($name,$vars_data=null,$cached = false)
  {
      //   $view_root =  __PROTECTED_PATH ;
-    $path = get_file_path($this->getViewName($name,$this->view_type),'views',$this->view_type);
-	if (file_exists($path) == false)
-	{
-		throw new Exception('Template not found in '. $path);
-		return false;
-	}
 
+    
 	// Load variables
     foreach ($this->vars as $key => $value)
     {
@@ -144,11 +157,46 @@ function render($name)
     {
         $$key = $value;
     }
+    $vars = $vars_data;
         //use the buffer to send out the masterpage
+      $views = $this->getView($name,$this->view_type);
+      $content = '';
+
+  if ($cached)
+    {
+    if (isset($this->registry->cache))
+        {
+         $hash = md5(seralize($this->vars)); 
+         $content = $this->registry->cache->get('view_cache_'.$name.$hash);
+        }
+    }
+  if (empty($content ))
+  {
+  foreach($views as $view)
+  {
+    $path = DCore::getFilePAth($view,'views',$this->view_type);
+	if (file_exists($path) == false)
+	{
+		throw new Exception('Template not found in '. $path);
+		return false;
+	}
+ 
         ob_start();
         include ($path);
-        $content = ob_get_contents();
+        $content .= ob_get_contents();
         ob_end_clean();
+  }
+  
+   if ($cached)
+   {
+    if (isset($this->registry->cache))
+        {
+         $hash = md5(seralize($this->vars)); 
+         $cache_data = $this->registry->cache->set('view_cache_'.$hash,$content,$cached);
+        }
+    }
+  }
+
         return $content;
 
           
@@ -157,6 +205,46 @@ function show($name)
 {
   $this->setView('contents',$name);
    
+}
+
+
+function getURLForAsset($filename,$ext)
+{
+
+       $themecheck = explode(':',   $filename);         
+       if ($themecheck[0] == 'theme')
+        {
+         $url =  URL_THEME . $themecheck[1].$ext; 
+        }
+        else
+        {               
+       $script   = DCore::getFilePath($filename,'','',$ext);
+       $url = $this->registry->assetManager->publishFilePath($script);
+       }
+       return $url;
+}
+function addJS($filename)
+{   
+       
+       if ( empty( $this->JSFiles[$filename]))
+       { 
+       $url = $this->getURLForAsset($filename,'.js') ;
+       $this->JSFiles[$filename] =  $url ;
+       }
+       
+ 
+}
+function addCSS($filename,$media = '')
+{   
+       
+       if ( empty( $this->CSSFiles[$filename]))
+       {                            
+       $url = $this->getURLForAsset($filename,'.css') ;
+       $this->CSSFiles[$filename]['url'] =  $url ;
+       $this->CSSFiles[$filename]['media'] =  $media ;
+       }
+       
+ 
 }
 
 }

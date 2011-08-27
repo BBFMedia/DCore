@@ -104,7 +104,7 @@ class router extends baseClass {
         if (is_callable(array($controller, $this->action . 'Action'))) {
             $action = $this->action . 'Action';
         }
-          else
+            else
             {
                 $action = 'index';
 
@@ -182,16 +182,10 @@ class router extends baseClass {
             }
         }
         $index = 2;
-        while(count($parts) > $index +1)//  /key/value/key/value
+        while(count($parts) > $index +1)
         {
          $cc = ('get_'.$parts[$index]) ;
          $this->registry->template->$cc= $parts[$index+1];
-         $index += 2;
-        }
-        foreach($_GET as $key => $item)///?key=value&key=value
-        {
-         $cc = ('get_'.key ) ;
-         $this->registry->template->$cc= $item;
          $index += 2;
         }
         if (empty($this->controller)) {
@@ -203,21 +197,16 @@ class router extends baseClass {
         if (empty($this->action)) {
             $this->action = 'index';
         }
+        
 
         /*** set the file path ***/
         $setControllerPath = $this->Controllers[$this->controller];
 
 
         if (!empty($setControllerPath)) {
-            $Controller_root = __PROTECTED_PATH;
-            $Controller_info = explode(':', $setControllerPath);
-            if (count($Controller_info) > 1) {
-                $this->file = __PROTECTED_PATH . 'plugins/' . $Controller_info[0] . '/controller/' . $Controller_info[1] . 'Controller.php';
-            }
-            else
-            {
-                $this->file = $this->path . '/' . $Controller_info[0] . 'Controller.php';
-            }
+                $this->file = DCore::getFilePAth( $setControllerPath.'Controller','controller');
+                
+                //     __PROTECTED_PATH . 'plugins/' . $Controller_info[0] . '/controller/' . $Controller_info[1] . 'Controller.php';
         }
         else
             $this->file = $this->path . '/' . $this->controller . 'Controller.php';
