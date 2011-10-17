@@ -29,10 +29,7 @@ if (isset($_GET['logout']))
 
 global $userMap,$authlist;
 
-$userMap = array('public' => 0,'client'=> 5,'staff' =>20 , 'sales'=>25,'ops'=>30,'accounting'=>30,'manager'=>35,'admin'=>50);
-$authlist = array(
-                  'login:*'=> 'public',
-                  'Application.pages.mod.clientview.*'=>'staff');
+
 class auth
 {
 

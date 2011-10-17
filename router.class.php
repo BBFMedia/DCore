@@ -115,8 +115,13 @@ class router extends baseClass {
     }
 
 
-    public function redirect($url) {
-        header("Location: " . $url);
+    public function redirect($controller_url, $action = null, $params = array()) {
+    if ($action)
+      $controller_url = $this->buildUrl( $controller_url, $action, $params );
+     if ($controller_url == '/')
+          $controller_url = $this->buildUrl( 'index' );
+  
+        header("Location: " . $controller_url);
         die;
 
     }

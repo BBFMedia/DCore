@@ -2,14 +2,14 @@
   // make sure session is started
  global $registry;
 /// make sure same user agent
-if ($registry->session->HTTP_USER_AGENT != md5($_SERVER['HTTP_USER_AGENT'])) {
+/*if ($registry->session->HTTP_USER_AGENT != md5($_SERVER['HTTP_USER_AGENT'])) {
  // session_regenerate_id(true);
   $session_name = md5($_SERVER['HTTP_USER_AGENT']);
   $registry->session->$session_name = '';
 }
  //set user agaent
 $registry->session->HTTP_USER_AGENT = md5($_SERVER['HTTP_USER_AGENT']);
-
+  */
 
 if (isset($_GET['logout']))
   {
@@ -51,14 +51,15 @@ class user extends baseClass
 
   $this->hash =  $this->registry->session->$session_name; 
   if ( !empty($this->hash ))
-   $this->db->loginHash($this->hash,$this);
+    $this->db->loginHash($this->hash,$this);
+    
+    
  }
  function loginUsername($username,$password,$remember= false)
  {
     session_regenerate_id(true);
     $valid = $this->db->loginUsername($username,$password,$this);
     $session_name = md5($_SERVER['HTTP_USER_AGENT']);
-
     $this->registry->session->$session_name =   $this->hash;
   return  $valid;
  }

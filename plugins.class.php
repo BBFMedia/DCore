@@ -19,9 +19,10 @@
         DCore::setPathOfAlias($plugin,$plugpath);
         require_once $init ;
         $this->_loadedPlugins[$plugin] = $plugpath;
-       break;
+       return true;
       }
      }
+     die('plugin '. $plugin.' not found');
   }
   function addPluginDirectory($name, $path)
   {

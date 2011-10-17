@@ -196,7 +196,7 @@ function render($name,$vars_data=null,$cached = false)
         }
     }
   }
-
+      
         return $content;
 
           
