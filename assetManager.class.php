@@ -80,18 +80,22 @@ class assetManager extends   baseClass
 	 * This method is required by IModule and is invoked by application.
 	 * @param TXmlElement module configuration
 	 */
-	public function init($basepath,$url)
-	{
-		$this->_basePath= $basepath;
-		if(!is_writable($this->_basePath) || !is_dir($this->_basePath))
+	public function init( $options = null,$url = null)
+	{      	if(!is_writable($this->_basePath) || !is_dir($this->_basePath))
 			throw new TConfigurationException('assetmanager_basepath_invalid',$this->_basePath);
-	        $this->_baseUrl = $url;
-   
+
 	}
-   function __construct($registry) {
-   
+   function __construct($registry,$options=null) {
+      $this->_basePath =  __ROOT_PATH.self::DEFAULT_BASEPATH;
+     $this->_baseUrl = URL_ROOT.self::DEFAULT_BASEPATH;
+        
+          if( $options['basepath'])
+		$this->_basePath= $options['basepath'];
+	     if( $options['url'])
+	  $this->_baseUrl = $options['url'];
+   	
      parent::__construct($registry);
-     $this->init(__ROOT_PATH.self::DEFAULT_BASEPATH,URL_ROOT.self::DEFAULT_BASEPATH);    
+     $this->init($this->_basePath, $this->_baseUrl);    
  }
 
 	/**
@@ -147,20 +151,24 @@ class assetManager extends   baseClass
 	 * @throws TInvalidDataValueException if the file path to be published is
 	 * invalid
 	 */
-	public function publishFilePath($path)
+	public function publishFilePath($path,$ext = '')
 	{
-		if(isset($this->_published[$path]))
-			return $this->_published[$path];
-		else if(empty($path) || ($fullpath=realpath($path))===false)
-			throw new TInvalidDataValueException('assetmanager_filepath_invalid',$path);
+	
+         if(isset($this->_published[$path.$ext]))
+			return $this->_published[$path.$ext];  
+                   
+                     
+                $fullpath=DCore::getFilePath($path,'','',$ext);         
+        	if(empty($path) || ($fullpath===false))
+			die('assetmanager_filepath_invalid'.$path);
 		else if(is_file($fullpath))
 		{
 			$dir=$this->hash(dirname($fullpath));
 			$fileName=basename($fullpath);
 			$dst=$this->_basePath.DIRECTORY_SEPARATOR.$dir;
-			if(!is_file($dst.DIRECTORY_SEPARATOR.$fileName) or $this->_checkTimestamp)
+                    	if(!is_file($dst.DIRECTORY_SEPARATOR.$fileName) or $this->_checkTimestamp)
 				$this->copyFile($fullpath,$dst);
-			return $this->_published[$path]=$this->_baseUrl.'/'.$dir.'/'.$fileName;
+			return $this->_published[$path.$ext]=$this->_baseUrl.'/'.$dir.'/'.$fileName;
 		}
 		else
 		{
@@ -169,9 +177,10 @@ class assetManager extends   baseClass
 			{
 				$this->copyDirectory($fullpath,$this->_basePath.DIRECTORY_SEPARATOR.$dir);
 			}
-			return $this->_published[$path]=$this->_baseUrl.'/'.$dir;
+			return $this->_published[$path.$ext]=$this->_baseUrl.'/'.$dir;
 		}
 	}
+
 
 	/**
 	 * @return array List of published assets
@@ -243,13 +252,15 @@ class assetManager extends   baseClass
 	 */
 	protected function copyFile($src,$dst)
 	{
-
-        	if(!is_dir($dst))
+          //      echo        $src;
+              	if(!is_dir($dst))
 		{
 			@mkdir($dst);
 			@chmod($dst, 0777);
 		}
 		$dstFile=$dst.DIRECTORY_SEPARATOR.basename($src);   
+  //  echo ($dstFile);
+        
     if(@filemtime($dstFile)<@filemtime($src))
 		{
    

@@ -47,7 +47,35 @@ public $router;
 	return $this->vars[$index];
  }
 
+ public function load()
+ {                                                                    
+  global $CONFIG;
 
+  $mods = $CONFIG['modules'];   
+  foreach($mods as $key => $item)
+  {
+   
+   if (!is_array($item))
+     {
+       $key = $item;
+      }
+   $cf = array('class' => $key , 'alias' => $key );
+   if (is_array($item))
+     {
+       $cf  = array_merge($cf  , $item);
+      }
+     
+   $alias = $cf['alias'];
+   $class = $cf['class'];
+   $options = $cf['options'];
+
+   $this->$alias = new  $class($this,$options); 
+   $this->$alias->init();   
+      
+  }
+ 
+if( file_exists(__PROTECTED_PATH. 'init.php'))  
+include __PROTECTED_PATH. 'init.php';
+
+ }
 }
-
-?>

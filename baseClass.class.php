@@ -16,9 +16,9 @@ class baseClass
  */
  public $registry;
 
+ public function init(){}
 
-
- function __construct($registry) {
+ function __construct($registry,$options = null) {
         $this->registry = $registry;
  }
 

@@ -37,7 +37,7 @@ class router extends baseClass {
     */
     private $path;
 
-    private $args = array();
+    private $args = array();          
 
     private $controllers = array();
 
@@ -135,10 +135,14 @@ class router extends baseClass {
      * @return string
      *
      */
-    public function buildUrl($controller, $action = 'index', $params = array()) {
-
-        $url = $controller . '/' . $action;
-
+    public function buildUrl($controller, $action = null, $params = array()) {
+        if ($action)
+         $url = $controller . '/' . $action;
+        else  if ( count($params))
+         $url = $controller  . '/index';
+        else
+         $url = $controller;
+        
         $p = '';
 
 

@@ -8,7 +8,8 @@
 * @global arrray(string) $searchPaths 
 */
 define ('__FRAMEWORK_PATH', dirname(__FILE__));
-require_once 'DCore.php';
+require_once __FRAMEWORK_PATH.'DCore.php';
+include __PROTECTED_PATH . 'config.php';
 
 
 

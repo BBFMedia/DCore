@@ -3,19 +3,52 @@ if(!defined('__FRAMEWORK_PATH'))
 	define('__FRAMEWORK_PATH',dirname(__FILE__));
 if(!defined('DCORE'))
 	define('DCORE',dirname(__FILE__));
+if(!defined('__REROUTE_SUBDOMAIN'))
+	define('__REROUTE_SUBDOMAIN',0);
 
-             
+
+/**
+* DCore is the base static class for the entire framework.               
+* The DCore frame work revolvers around the static class DCore and       
+* a singlton instance of class global $registry            
+*/
+
 class DCore
 {
 
+
+/**
+* gate()                                                        
+* will check if the current users can access the passed GUID    
+* R = read  M = modify C = comment A add to                     
+* @param guid $guid the guid of the object u are accessing      
+* @param char $access the type of access required               
+* @return  boolean true if allowed                              
+*
+*/                                                             
+ 
 static function gate($guid,$access = 'R')
 {
  return true;
  }
+
+ 
 static function authFilter($array , $field,$access = 'R')
 {
 return $array;
 } 
+
+
+
+/**
+* addSearchPath()
+* 
+* Add a path to the class autoload path
+* @param string $path  the path to include
+* 
+*
+*/
+
 function addSearchPath($path)
 {
  global $CONFIG;
@@ -29,19 +62,67 @@ function addSearchPath($path)
  $CONFIG['searchPaths'][] = realpath($path);
 }
 
-function getFilePath($filename,$type = '',$view_type='default',$ext = self::CLASS_FILE_EXT)
+
+/**
+* ExpandUrl()
+* creates a url  that is on a different sub domain
+* 
+* @param string $url  the url to modify
+* @param string $alt  the sub-domain to use in new url
+* @return string new url
+*
+*/
+function ExpandUrl($url,$alt = null)
 {
-        
-        $view_info = explode(':',$filename);
+     
+  if ((!empty($alt)) and (__REROUTE_SUBDOMAIN))
+     {
+   $domain = $_SERVER['HTTP_HOST'];
+     $domain = preg_replace('/^(www|dev)./',$alt,$domain);
+  return 'http://'.$domain.$url;
+    //  $domain = $alt . $domain;
+     }
+     return $url;
+}
+
+
+/**
+* getFilePath()
+* 
+* converts a dcore name space to a file path
+* 
+* namespace syntax  alias:path
+* 
+* if type is specified then then the result will be  alias  "/" type "/" path 
+* can be a file type or folder
+* 
+* @param string $namespace
+* @param string $type
+* @param string $view_type
+* @param string $ext
+* @param boolean $throwEx
+* @return string
+*
+*/
+function getFilePath($namespace,$type = '',$view_type='default',$ext = self::CLASS_FILE_EXT,$throwEx = true)
+{
+        if (file_exists(realpath($namespace)))
+          return  realpath($namespace);
+        $view_info = explode(':',$namespace);
         if (count($view_info) > 1)
          {
+         //only use registered alias or plugins
          $plugpath = self::$_aliases[$view_info[0]];
          if (empty($plugpath))
          {
-        $plugpath = __FRAMEWORK_PATH .'core/'. $view_info[0].'/';
-        if (!file_exists($plugpath))
-            $plugpath = __PROTECTED_PATH .'plugins/'. $view_info[0].'/';
-        }
+             $plugpath =  __PROTECTED_PATH .'plugins/'. $view_info[0];
+        
+        if (!file_exists(realpath($plugpath)))
+             $plugpath = __FRAMEWORK_PATH .'core/'. $view_info[0].'/';
+      
+          
+         } 
+
         if ($type== 'views')
         {
             $file =  $plugpath.'/'.$type.'/'.$view_type.'/'.$view_info[1].$ext;
@@ -57,7 +138,9 @@ function getFilePath($filename,$type = '',$view_type='default',$ext = self::CLAS
         else
         {
            $file =  $plugpath.'/'.$type.'/'.$view_info[1].$ext;
-
+       
+        
+           
            if (!file_exists($file))
                 $file =  __PROTECTED_PATH .$type.'/'. $view_info[0].$ext;
 
@@ -67,7 +150,7 @@ function getFilePath($filename,$type = '',$view_type='default',$ext = self::CLAS
         }
         else
         {
-              $file = __PROTECTED_PATH .$type.'/'. $filename.$ext;
+              $file = __PROTECTED_PATH .$type.'/'. $namespace.$ext;
 
            if (file_exists($file))
              return $file;
@@ -76,8 +159,8 @@ function getFilePath($filename,$type = '',$view_type='default',$ext = self::CLAS
     	if (file_exists($file) == false)
 	{
  
-             
-		throw new Exception('Path not found in '. $filename);
+                if ($throwEx )
+		throw new Exception('Path not found in '. $namespace);
 		return false;
 	}
 
@@ -103,10 +186,21 @@ function getFilePath($filename,$type = '',$view_type='default',$ext = self::CLAS
 	 */
 	 static $classExists = array();
   
+
+/**
+* getPathOfAlias()
+* gets the path of a dcore alias
+* 
+* @param string $alias the alias name wanted
+* @return string patth of alias
+*
+*/
+ 
 	public static function getPathOfAlias($alias)
 	{
 		return isset(self::$_aliases[$alias])?self::$_aliases[$alias]:null;
 	}
+
 
 	protected static function getPathAliases()
 	{
@@ -157,6 +251,7 @@ function getFilePath($filename,$type = '',$view_type='default',$ext = self::CLAS
 			throw new TInvalidDataValueException('prado_using_invalid',$namespace.' - '.$path);
 	}
 	/**
+ * setPathOfAlias()
 	 * @param string alias to the path
 	 * @param string the path corresponding to the alias
 	 * @throws TInvalidOperationException if the alias is already defined
@@ -181,6 +276,14 @@ function getFilePath($filename,$type = '',$view_type='default',$ext = self::CLAS
 	}
 
 
+/**
+* redirect()
+* 
+* redirects a the browser to an new url
+* @param string url to redirect to
+*
+*/
+
     static function redirect($path)
     {
        $host = $_SERVER['HTTP_HOST'];
@@ -191,7 +294,7 @@ function getFilePath($filename,$type = '',$view_type='default',$ext = self::CLAS
 
 public static function fatalError($msg)
 	{
-		echo '<h1>Fatal Error</h1>';
+		echo '<h1>DCore Fatal Error</h1>';
 		echo '<p>'.$msg.'</p>';
 		if(!function_exists('debug_backtrace'))
 			return;

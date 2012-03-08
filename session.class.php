@@ -5,6 +5,11 @@ class session extends baseClass {
         session_start();
         parent::__construct($registry);
  }
+ function init()
+ {
+
+      
+ }
 public function __set($index, $value)
  {
         $_SESSION[$index] = $value;
@@ -12,6 +17,7 @@ public function __set($index, $value)
  
  public function __get($index)
  {
+
      if (isset($_SESSION[$index]))
         return  $_SESSION[$index];
      return null;

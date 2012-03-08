@@ -174,6 +174,17 @@ function render($name,$vars_data=null,$cached = false)
   {
   foreach($views as $view)
   {
+    $path = DCore::getFilePAth($view,'views',$this->view_type,'.twig',false);
+          ob_start();
+      
+    if (  $path)
+    {
+      $twig = new DTwig();
+      $content .= $twig->render($path,$this,$vars);
+      unset($twig);
+    }
+    else
+    {
     $path = DCore::getFilePAth($view,'views',$this->view_type);
 	if (file_exists($path) == false)
 	{
@@ -181,10 +192,11 @@ function render($name,$vars_data=null,$cached = false)
 		return false;
 	}
  
-        ob_start();
         include ($path);
         $content .= ob_get_contents();
-        ob_end_clean();
+    
+     }
+         ob_end_clean();   
   }
   
    if ($cached)
@@ -218,8 +230,15 @@ function getURLForAsset($filename,$ext)
         }
         else
         {               
-       $script   = DCore::getFilePath($filename,'','',$ext);
+        $subpaths = explode('!',$filename);
+     
+       $script   = DCore::getFilePath($subpaths[0],'','',(isset($subpaths[1])?'':$ext));
+     
        $url = $this->registry->assetManager->publishFilePath($script);
+     
+       if (isset($subpaths[1]))
+       $url = $url .$subpaths[1].$ext  ;
+     
        }
        return $url;
 }
