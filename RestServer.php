@@ -422,8 +422,7 @@ class RestServer extends router
 	public function getData()
 	{
 		$data = file_get_contents('php://input');
-		
-		if ($this->format == RestFormat::AMF) {
+           	if ($this->format == RestFormat::AMF) {
 			require_once 'Zend/Amf/Parse/InputStream.php';
 			require_once 'Zend/Amf/Parse/Amf3/Deserializer.php';
 			$stream = new Zend_Amf_Parse_InputStream($data);
@@ -582,3 +581,18 @@ class RestException extends Exception
 	}
 	
 }
+
+
+if( !class_exists('baseController'))
+{
+class  baseController {}
+} 
+
+class restController extends  baseController
+{
+public function index()
+{
+ /// Dcore web controller is abstract and not needed in rest
+}
+}
+ 

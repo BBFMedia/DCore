@@ -266,6 +266,65 @@ function addCSS($filename,$media = '')
  
 }
 
+function renderCSS($build)
+{
+
+      $dir = trim(URL_ROOT.'assets','/'); 
+      if ($this->registry->debugMode) {  
+       
+        foreach(   $this->CSSFiles  as $css) {
+      $result .= "<link rel='stylesheet' type='text/css' href='". DCore::ExpandUrl($css['url'],'css.') ."' ".
+           empty($css['media'])?'':"media='print' ". " />"; 
+        }
+        
+        }
+        else
+        {
+     $minurl  = array();
+        foreach(   $this->CSSFiles  as $css) {
+        if ( empty($css['media']))
+           $css['media'] = 'screen';
+          $css['url'] = str_replace($dir,'',$css['url']) ;
+         $minurl[$css['media']] = $minurl[$css['media']]. substr($css['url'],1,1000).',';
+          }
+
+
+          
+     foreach($minurl as $key => $u )
+     {     
+   $result .= 
+  "<link rel='stylesheet' type='text/css' href='". rtrim( URL_ROOT,'/') ."/min/b=". $dir ."&amp;f=". rtrim ($u,',')."&version=". $build ."'  media='". $key ."'  /> ";
+  
+      }
+        }
+return $result;
+}
+function renderJS($build)
+{        
+    	
+     if ($this->registry->debugMode) {  
+  
+        foreach(   $this->JSFiles  as $script) {
+     
+         $result .= '<script type="text/javascript"  src="'. DCore::ExpandUrl( $script,'js.' ) .'"></script>';
+       
+        
+        }
+        }
+        else
+        {
+     $minurl = rtrim( URL_ROOT,'/').'/min/b='. $dir .'&amp;f=';
+        foreach(   $this->JSFiles  as $script) {
+             $script = str_replace($dir.'/','',$script) ;
+        $minurl .= substr($script,1,1000).',';
+          }
+       $result .= '<script type="text/javascript" src="'. rtrim ($minurl,',') .'&version=' .$build.'"></script>';
+        }
+        
+ return $result;
+ }
+
+
 }
 
 ?>
