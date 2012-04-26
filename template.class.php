@@ -77,6 +77,7 @@ private $vars = array();
 private $views = array();
 private $CSSFiles = array();
 private $JSFiles = array();
+public  $useXHP = false;
 /**
 /**
  *
@@ -109,6 +110,20 @@ private $JSFiles = array();
  {
         $this->vars[$index] = $value;
  }
+ 
+ 
+ 
+ function __construct($registry,$options = null) {
+        parent::__construct($registry,$options);
+         if (isset($options['useXHP']))
+         $this->useXHP = $options['useXHP'];
+         
+         if ($this->useXHP)
+            require_once(dirname(__FILE__).'/php-lib/init.php');  
+	
+	}
+ 
+ 
  function setViewType($viewtype)
  {
   $this->view_type =  $viewtype;
@@ -247,8 +262,8 @@ function addJS($filename)
        
        if ( empty( $this->JSFiles[$filename]))
        { 
-       $url = $this->getURLForAsset($filename,'.js') ;
-       $this->JSFiles[$filename] =  $url ;
+        $url = $this->getURLForAsset($filename,'.js') ;
+        $this->JSFiles[$filename] =  $url ;
        }
        
  
@@ -258,29 +273,29 @@ function addCSS($filename,$media = '')
        
        if ( empty( $this->CSSFiles[$filename]))
        {                            
-       $url = $this->getURLForAsset($filename,'.css') ;
-       $this->CSSFiles[$filename]['url'] =  $url ;
-       $this->CSSFiles[$filename]['media'] =  $media ;
+        $url = $this->getURLForAsset($filename,'.css') ;
+        $this->CSSFiles[$filename]['url'] =  $url ;
+        $this->CSSFiles[$filename]['media'] =  $media ;
        }
        
  
 }
 
-function renderCSS($build)
+function renderCSS($build=0)
 {
-
+      $result = '';
       $dir = trim(URL_ROOT.'assets','/'); 
       if ($this->registry->debugMode) {  
-       
+      
         foreach(   $this->CSSFiles  as $css) {
-      $result .= "<link rel='stylesheet' type='text/css' href='". DCore::ExpandUrl($css['url'],'css.') ."' ".
-           empty($css['media'])?'':"media='print' ". " />"; 
+          $result .= "<link rel='stylesheet' type='text/css' href='". DCore::ExpandUrl($css['url'],'css.') ."' ".
+           (empty($css['media'])?'':"media='print' "). " />"; 
         }
         
         }
         else
         {
-     $minurl  = array();
+        $minurl  = array();
         foreach(   $this->CSSFiles  as $css) {
         if ( empty($css['media']))
            $css['media'] = 'screen';
@@ -299,7 +314,7 @@ function renderCSS($build)
         }
 return $result;
 }
-function renderJS($build)
+function renderJS($build=0)
 {        
     	
      if ($this->registry->debugMode) {  
@@ -326,5 +341,3 @@ function renderJS($build)
 
 
 }
-
-?>

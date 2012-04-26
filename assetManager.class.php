@@ -82,7 +82,7 @@ class assetManager extends   baseClass
 	 */
 	public function init( $options = null,$url = null)
 	{      	if(!is_writable($this->_basePath) || !is_dir($this->_basePath))
-			throw new TConfigurationException('assetmanager_basepath_invalid',$this->_basePath);
+			throw new Exception('assetmanager_basepath_invalid '.$this->_basePath);
 
 	}
    function __construct($registry,$options=null) {
