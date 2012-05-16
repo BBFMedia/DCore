@@ -7,7 +7,7 @@
  * @copyright Copyright &copy; 2005-2011 PradoSoft
  * @license http://www.pradosoft.com/license/
  * @version $Id: TSqliteCache.php 2996 2011-06-20 15:24:57Z ctrlaltca@gmail.com $
- * @package System.Caching
+ * @package DCore.cache
  */
 
 /**
@@ -163,11 +163,22 @@ private $_salt = '45_{JKjnsdfgvl8osnvsef';
 		return $this->addValue($this->generateUniqueKey($id),serialize($data),$expire);
 	}
 	
-	
+	/**
+         * this function returns **true** or **false** if the key $id is in cache.
+         * $value is return by reference with the stored value if present.
+         * 
+         * @param string $id
+         * @param mixed $value
+         * @return boolean 
+         */
          public function getRef($id,&$value)
          {
+             //gets cache arrayx from cache
 		if(($value=$this->getValue($this->generateUniqueKey($id)))!==false)
 		{
+                    //unserialize the object .
+                    // all data is stored in a cache array
+                    // if $value is not an array  then it was never stored or expired
 			$data=unserialize($value);
 			if(!is_array($data))
 				return false;

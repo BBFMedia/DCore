@@ -9,7 +9,7 @@
  * @copyright Copyright &copy; 2005-2011 PradoSoft
  * @license http://www.pradosoft.com/license/
  * @version $Id: TAssetManager.php 2996 2011-06-20 15:24:57Z ctrlaltca@gmail.com $
- * @package System.Web
+ * @package DCore
  */
 
 /**
@@ -41,7 +41,7 @@
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @version $Id: TAssetManager.php 2996 2011-06-20 15:24:57Z ctrlaltca@gmail.com $
- * @package System.Web
+ * @package DCore
  * @since 3.0
  */
 class assetManager extends   baseClass

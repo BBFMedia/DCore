@@ -2,9 +2,10 @@
 
 /**
  *  router dispatches http request
- 1) determine which controller to use
- 2) determine action to be called on controller
- 3) add url params to template   name/value/name/value/name/value
+ * 
+ 1.  determine which controller to use
+ 2.  determine action to be called on controller
+ 3.  add url params to template   name/value/name/value/name/value
 
 
  router will first search the registered controllers and then look in the default
@@ -16,7 +17,7 @@
   -------------------
   calling setController will set or overide if exists the the controller class.
   
-  $this->registry->router->setController('controllerName','pluginname:controllerFilename');
+    $this->registry->router->setController('controllerName','pluginname:controllerFilename');
   
   if ROOT/{controllerName} is requested the router would look in 
        protected/plugins/{pluginname}/controller/{controllerFilename}Controller.php
