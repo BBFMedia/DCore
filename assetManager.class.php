@@ -2,7 +2,7 @@
 /**
  * TAssetManager class
  *
- 
+
    usesd from Prado
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @link http://www.pradosoft.com/
@@ -88,14 +88,14 @@ class assetManager extends   baseClass
    function __construct($registry,$options=null) {
       $this->_basePath =  __ROOT_PATH.self::DEFAULT_BASEPATH;
      $this->_baseUrl = URL_ROOT.self::DEFAULT_BASEPATH;
-        
+
           if( $options['basepath'])
 		$this->_basePath= $options['basepath'];
 	     if( $options['url'])
 	  $this->_baseUrl = $options['url'];
-   	
+
      parent::__construct($registry);
-     $this->init($this->_basePath, $this->_baseUrl);    
+     $this->init($this->_basePath, $this->_baseUrl);
  }
 
 	/**
@@ -153,26 +153,36 @@ class assetManager extends   baseClass
 	 */
 	public function publishFilePath($path,$ext = '')
 	{
-	
+	//	$path = str_replace('//' ,'/', $path);
+
          if(isset($this->_published[$path.$ext]))
-			return $this->_published[$path.$ext];  
-                   
-                     
-                $fullpath=DCore::getFilePath($path,'','',$ext);         
+			return $this->_published[$path.$ext];
+
+
+            $fullpath=DCore::getFilePath($path,'','',$ext);
+		$fullpath = str_replace('\\' ,DIRECTORY_SEPARATOR, $fullpath);
+		$fullpath = str_replace('/' ,DIRECTORY_SEPARATOR, $fullpath);
+		$fullpath = str_replace(DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR ,DIRECTORY_SEPARATOR, $fullpath);
+
         	if(empty($path) || ($fullpath===false))
 			die('assetmanager_filepath_invalid'.$path);
 		else if(is_file($fullpath))
 		{
-			$dir=$this->hash(dirname($fullpath));
+	     	$dir = dirname($fullpath);
+
+		    $dir=$this->hash(dirname($fullpath));
 			$fileName=basename($fullpath);
 			$dst=$this->_basePath.DIRECTORY_SEPARATOR.$dir;
-                    	if(!is_file($dst.DIRECTORY_SEPARATOR.$fileName) or $this->_checkTimestamp)
+            if(!is_file($dst.DIRECTORY_SEPARATOR.$fileName) or $this->_checkTimestamp)
 				$this->copyFile($fullpath,$dst);
 			return $this->_published[$path.$ext]=$this->_baseUrl.'/'.$dir.'/'.$fileName;
 		}
 		else
 		{
-			$dir=$this->hash($fullpath);
+			 $dir = dirname($fullpath."/test");
+
+			$dir=$this->hash($dir);
+
 			if(!is_dir($this->_basePath.DIRECTORY_SEPARATOR.$dir) or $this->_checkTimestamp )
 			{
 				$this->copyDirectory($fullpath,$this->_basePath.DIRECTORY_SEPARATOR.$dir);
@@ -258,12 +268,12 @@ class assetManager extends   baseClass
 			@mkdir($dst);
 			@chmod($dst, 0777);
 		}
-		$dstFile=$dst.DIRECTORY_SEPARATOR.basename($src);   
+		$dstFile=$dst.DIRECTORY_SEPARATOR.basename($src);
   //  echo ($dstFile);
-        
+
     if(@filemtime($dstFile)<@filemtime($src))
 		{
-   
+
 			@copy($src,$dstFile);
 		}
 	}

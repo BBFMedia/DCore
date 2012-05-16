@@ -1,5 +1,10 @@
 <?php
 
+/**
+ *abstract class all controllers are extended from
+ * @package DCore 
+ */
+
 Abstract Class baseController extends baseClass {
 
 

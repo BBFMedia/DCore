@@ -1,6 +1,6 @@
 <?php
 /**
- * TSqliteCache class file
+ * cache class file
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @link http://www.pradosoft.com/
@@ -11,25 +11,11 @@
  */
 
 /**
- * TSqliteCache class
+ * cache class
  *
  *  used from Prado
  * 
- * TSqliteCache implements a cache application module based on SQLite database.
  *
- * To use this module, the sqlite PHP extension must be loaded. Note, Sqlite extension
- * is no longer loaded by default since PHP 5.1.
- *
- * Sine PRADO v3.1.0, a new DB-based cache module called {@link TDbCache}
- * is provided. If you have PDO extension installed, you may consider using
- * the new cache module instead as it allows you to use different database
- * to store the cached data.
- *
- * The database file is specified by the {@link setDbFile DbFile} property.
- * If not set, the database file will be created under the system state path.
- * If the specified database file does not exist, it will be created automatically.
- * Make sure the directory containing the specified DB file and the file itself is
- * writable by the Web server process.
  *
  * The following basic cache operations are implemented:
  * - {@link get} : retrieve the value with a key (if any) from cache
@@ -45,31 +31,46 @@
  * By definition, cache does not ensure the existence of a value
  * even if it never expires. Cache is not meant to be an persistent storage.
  *
- * Do not use the same database file for multiple applications using TSqliteCache.
- * Also note, cache is shared by all user sessions of an application.
  *
- * Some usage examples of TSqliteCache are as follows,
+ * Some usage examples of cache are as follows,
  * <code>
- * $cache=new TSqliteCache;  // TSqliteCache may also be loaded as a Prado application module
- * $cache->setDbFile($dbFilePath);
- * $cache->init(null);
+ * $cache=new cache;  // cache may also be loaded as a application module
+ * $cache->init();
  * $cache->add('object',$object);
  * $object2=$cache->get('object');
  * </code>
  *
- * If loaded, TSqliteCache will register itself with {@link TApplication} as the
- * cache module. It can be accessed via {@link TApplication::getCache()}.
  *
- * TSqliteCache may be configured in application configuration file as follows
+ * usually loadded in the application config
  * <code>
- * <module id="cache" class="System.Caching.TSqliteCache" DbFile="Application.Data.site" />
+ * $CONFIG['modules'] = array(
+ *                         "cache" => array('class'=>"TAPCCache"),
+ *                         ...
+ *                          );
  * </code>
- * where {@link getDbFile DbFile} is a property specifying the location of the
- * SQLite DB file (in the namespace format).
- *
+ * later can be called like this
+ * <code>
+ * $registry->cache->add('apple',data);
+ * </code>
+ * 
+ * there is not reason you can not run multipe caches
+ * <code>
+ * $CONFIG['modules'] = array(
+ *                         "cache" => array('class'=>"TAPCCache"),
+ *                         "redis" => array('class'=>"redisCache"),
+ *                         ...
+ *                          );
+ * </code>
+ * later can be called like this.
+ * <code>
+ * $registry->cache->add('apple',data);
+ * $registry->redis->add('apple',data);
+ * 
+ * </code>
+ 
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @version $Id: TSqliteCache.php 2996 2011-06-20 15:24:57Z ctrlaltca@gmail.com $
- * @package System.Caching
+ * @package DCore.cache
  * @since 3.0
  */
  
@@ -227,7 +228,31 @@ abstract protected	 function flush() ;
 
     
     }
- 
+ /**
+  * an sqlite version od cache
+  * 
+  * 
+  * file key in $options is required for module loading
+  * 
+ * <code>
+ * $cache=new sqliteCache;  // cache may also be loaded as a application module
+ * $cache->init(array('file'=>sqlitefilepath);
+ * $cache->add('object',$object);
+ * $object2=$cache->get('object');
+ * </code>
+  * 
+  * <code>
+ * $CONFIG['modules'] = array(
+ *                         "cache" => array('class'=>"sqliteCache" , 
+  *                                         'options'=>array('file'=>sqlitefilepath)
+  *                                           ),
+ *                         ...
+ *                          );
+ * </code>
+
+  * @package DCore.cache
+  *  
+  */
 class sqliteCache extends cache
 {
 	/**
@@ -379,6 +404,15 @@ class sqliteCache extends cache
 		return $this->_db->query('DELETE FROM '.self::CACHE_TABLE)!==false;
 	}
 }
+
+ /**
+  * an APC version of cache
+  * 
+  * will throw an error if APC is not loaded
+  * 
+  * @package DCore.cache
+  *  
+  */
 class TAPCCache extends cache
 {
    /**

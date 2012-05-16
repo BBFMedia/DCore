@@ -1,6 +1,8 @@
 <?php
 ////////////////////////////////////////////////////////////////////////////////
-//
+//  
+//  this is a slightly modified verision of Jacob Wrights REST server
+//  
 // Copyright (c) 2009 Jacob Wright
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,6 +24,8 @@
 // THE SOFTWARE.
 //
 ////////////////////////////////////////////////////////////////////////////////
+
+
 
 /**
  * Constants used in RestServer Class.

@@ -4,8 +4,8 @@
 
 Template is in charge of rendering views
 
-An nested view system is used. Meaning that a masterpage is rendered and 
-is responisble for rendering all views with in masterpage and those view are 
+An nested view system is used. Meaning that a masterpage is rendered and
+is responisble for rendering all views with in masterpage and those view are
 responisble for the view with in them and so on.
 
 
@@ -16,45 +16,45 @@ Calling render($viewname) will return the rendered string of that view and that 
 registering a view
 
 setView('viewname','pluginname:viewfile');
-   would register 
+   would register
        protected/plugins/{pluginname}/views/default/{viewfile}.php
     as a view for "viewname"
-    
+
     if pluginname is left off then use the path
        protected/views/{viewfile}.php
-        
-   
+
+
    note that a folder named "default" is in the path. This is the view type.
      the view type can be set by calling setViewType($viewType)
      view type "default" is default
-     template would look in 
+     template would look in
        protected/plugins/{pluginname}/views/{viewtype}/{viewfile}.php
-     if it does not exist then look in 
+     if it does not exist then look in
        protected/plugins/{pluginname}/views/default/{viewfile}.php
 
  can also call setView('viewname','pluginname:viewfile','viewtype');
- 
- example 
+
+ example
     $this->registry->templates->setView('viewname','pluginname:viewfile','mobile');
-    
+
     if the view type is set to "mobile" then it would render the this file as as
-    instead of the file registered else where. 
-    
+    instead of the file registered else where.
+
 
 
 **********************
-rendering a view  
+rendering a view
    when calling render the class will first check if the view is registered if so renders that file
    if the view is not registered it will look for the view as
-         protected/views/{viewname}.php 
-  
-  
+         protected/views/{viewname}.php
+
+
   Plugins may override controllers with this scheama. So the order of plugin initalization can effect this.
-  
- 
+
+
 standard practice would be the master template would be registered as "masterpage"
 and the content be registered as "contents"
-plus in master controller should be <?php $this->render('contents') 
+plus in master controller should be <?php $this->render('contents')
 
 
 templates has a helper function show($viewname) to set the "contents" view. usually
@@ -72,7 +72,7 @@ Class Template extends baseClass
  * @Variables array
  * @access private
  */
-private $view_type = 'default'; 
+private $view_type = 'default';
 private $vars = array();
 private $views = array();
 private $CSSFiles = array();
@@ -110,20 +110,22 @@ public  $useXHP = false;
  {
         $this->vars[$index] = $value;
  }
- 
- 
- 
+
+
+
  function __construct($registry,$options = null) {
         parent::__construct($registry,$options);
-         if (isset($options['useXHP']))
-         $this->useXHP = $options['useXHP'];
-         
+ 	if (isset($options['useXHP']))
+ 		$this->useXHP = $options['useXHP'];
+ 	if (isset($options['view_type']))
+ 		$this->view_type = $options['view_type'];
+
          if ($this->useXHP)
-            require_once(dirname(__FILE__).'/php-lib/init.php');  
-	
+            require_once(dirname(__FILE__).'/php-lib/init.php');
+
 	}
- 
- 
+
+
  function setViewType($viewtype)
  {
   $this->view_type =  $viewtype;
@@ -133,11 +135,11 @@ public  $useXHP = false;
  if ( empty( $this->views[$view_type][$view]))
     $this->setView($view,$view_path,$view_type);
     else
-    $this->views[$view_type][$view][] = $view_path; 
+    $this->views[$view_type][$view][] = $view_path;
  }
  function setView($view,$view_path,$view_type = 'default')
  {
- $this->views[$view_type][$view] = array($view_path); 
+ $this->views[$view_type][$view] = array($view_path);
  }
  function getView($name,$view_type = null)
  {
@@ -154,7 +156,7 @@ public  $useXHP = false;
         return $view;
   if (preg_match("/:/",$view) )
       return array($view);
-      
+
    return array();
 
  }
@@ -162,7 +164,7 @@ function render($name,$vars_data=null,$cached = false)
  {
      //   $view_root =  __PROTECTED_PATH ;
 
-    
+
 	// Load variables
     foreach ($this->vars as $key => $value)
     {
@@ -181,7 +183,7 @@ function render($name,$vars_data=null,$cached = false)
     {
     if (isset($this->registry->cache))
         {
-         $hash = md5(seralize($this->vars)); 
+         $hash = md5(seralize($this->vars));
          $content = $this->registry->cache->get('view_cache_'.$name.$hash);
         }
     }
@@ -191,7 +193,7 @@ function render($name,$vars_data=null,$cached = false)
   {
     $path = DCore::getFilePAth($view,'views',$this->view_type,'.twig',false);
           ob_start();
-      
+
     if (  $path)
     {
       $twig = new DTwig();
@@ -206,92 +208,92 @@ function render($name,$vars_data=null,$cached = false)
 		throw new Exception('Template not found in '. $path);
 		return false;
 	}
- 
+
         include ($path);
         $content .= ob_get_contents();
-    
+
      }
-         ob_end_clean();   
+         ob_end_clean();
   }
-  
+
    if ($cached)
    {
     if (isset($this->registry->cache))
         {
-         $hash = md5(seralize($this->vars)); 
+         $hash = md5(seralize($this->vars));
          $cache_data = $this->registry->cache->set('view_cache_'.$hash,$content,$cached);
         }
     }
   }
-      
+
         return $content;
 
-          
+
 }
 function show($name)
 {
   $this->setView('contents',$name);
-   
+
 }
 
 
 function getURLForAsset($filename,$ext)
 {
 
-       $themecheck = explode(':',   $filename);         
+       $themecheck = explode(':',   $filename);
        if ($themecheck[0] == 'theme')
         {
-         $url =  URL_THEME . $themecheck[1].$ext; 
+         $url =  URL_THEME . $themecheck[1].$ext;
         }
         else
-        {               
+        {
         $subpaths = explode('!',$filename);
-     
+
        $script   = DCore::getFilePath($subpaths[0],'','',(isset($subpaths[1])?'':$ext));
-     
+
        $url = $this->registry->assetManager->publishFilePath($script);
-     
+
        if (isset($subpaths[1]))
        $url = $url .$subpaths[1].$ext  ;
-     
+
        }
        return $url;
 }
 function addJS($filename)
-{   
-       
+{
+
        if ( empty( $this->JSFiles[$filename]))
-       { 
+       {
         $url = $this->getURLForAsset($filename,'.js') ;
         $this->JSFiles[$filename] =  $url ;
        }
-       
- 
+
+
 }
 function addCSS($filename,$media = '')
-{   
-       
+{
+
        if ( empty( $this->CSSFiles[$filename]))
-       {                            
+       {
         $url = $this->getURLForAsset($filename,'.css') ;
         $this->CSSFiles[$filename]['url'] =  $url ;
         $this->CSSFiles[$filename]['media'] =  $media ;
        }
-       
- 
+
+
 }
 
 function renderCSS($build=0)
 {
       $result = '';
-      $dir = trim(URL_ROOT.'assets','/'); 
-      if ($this->registry->debugMode) {  
-      
+      $dir = trim(URL_ROOT.'assets','/');
+      if ($this->registry->debugMode) {
+
         foreach(   $this->CSSFiles  as $css) {
           $result .= "<link rel='stylesheet' type='text/css' href='". DCore::ExpandUrl($css['url'],'css.') ."' ".
-           (empty($css['media'])?'':"media='print' "). " />"; 
+           (empty($css['media'])?'':"media='print' "). " />";
         }
-        
+
         }
         else
         {
@@ -304,26 +306,26 @@ function renderCSS($build=0)
           }
 
 
-          
+
      foreach($minurl as $key => $u )
-     {     
-   $result .= 
+     {
+   $result .=
   "<link rel='stylesheet' type='text/css' href='". rtrim( URL_ROOT,'/') ."/min/b=". $dir ."&amp;f=". rtrim ($u,',')."&version=". $build ."'  media='". $key ."'  /> ";
-  
+
       }
         }
 return $result;
 }
 function renderJS($build=0)
-{        
-    	
-     if ($this->registry->debugMode) {  
-  
+{
+
+     if ($this->registry->debugMode) {
+
         foreach(   $this->JSFiles  as $script) {
-     
+
          $result .= '<script type="text/javascript"  src="'. DCore::ExpandUrl( $script,'js.' ) .'"></script>';
-       
-        
+
+
         }
         }
         else
@@ -335,7 +337,7 @@ function renderJS($build=0)
           }
        $result .= '<script type="text/javascript" src="'. rtrim ($minurl,',') .'&version=' .$build.'"></script>';
         }
-        
+
  return $result;
  }
 

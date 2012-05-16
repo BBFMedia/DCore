@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * 
  * User: Adrian
  * Date: Mar 11, 2011
  * Time: 4:18:23 PM
@@ -10,12 +10,13 @@ define('DIRECTORY_SEPARATOR','/');
 require_once __FRAMEWORK_PATH . 'baseClass.class.php';
 require_once __FRAMEWORK_PATH . 'controller_base.class.php';
 
-    /**
+/**
 }
 * Autoload for classes
 * @global __autoload  Enums $searchPaths to find a matching filename and includes it
 * @param string $class_name classname
 * @return boolean
+ *@package DCore
 */
 function __autoload($class_name) {
     $file = can_auto_load($class_name);
@@ -27,6 +28,15 @@ function __autoload($class_name) {
 
       return false;
 }
+
+/**
+ * checks if the class can be loaded.
+ * 
+ * 
+ * @global type $CONFIG
+ * @param type $class_name
+ * @return boolean|string 
+ */
 function can_auto_load($class_name)
 {
       global $CONFIG;

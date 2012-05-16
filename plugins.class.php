@@ -2,7 +2,9 @@
 
  $CONFIG = merge_config(array('plugins' => array()),$CONFIG);
  
- 
+ /**
+  *  
+  */
  class plugin extends baseClass
  {
   public $path = '';

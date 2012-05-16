@@ -1,5 +1,13 @@
 <?php
- 
+/** 
+ * An sqlite version of the session class
+ * 
+ * a drop in replacement
+ * 
+ * It still uses the $_SESSION global to get the session id. Everything else is stored in a sqlite file
+ * 
+ *  
+ */ 
 class DBsession extends baseClass
     {
 

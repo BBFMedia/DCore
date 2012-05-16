@@ -1,8 +1,7 @@
 <?php
 
-/*
-
- router dispatches http request
+/**
+ *  router dispatches http request
  1) determine which controller to use
  2) determine action to be called on controller
  3) add url params to template   name/value/name/value/name/value
@@ -12,23 +11,34 @@
  controller path  for a file "controlname.class.php"
  
  
-  ***********
-  REGISTER CONTROLLER
   
+  REGISTER CONTROLLER
+  -------------------
   calling setController will set or overide if exists the the controller class.
   
   $this->registry->router->setController('controllerName','pluginname:controllerFilename');
   
-  if "controllerName" is requested the router would look in 
+  if ROOT/{controllerName} is requested the router would look in 
        protected/plugins/{pluginname}/controller/{controllerFilename}Controller.php
  
-  
+   a controller has actions that are called by ROOT/{controllerName}/{action}
+ * 
+ * actions are functions in a controller ending with Action
+ * 
+ * example  ROOT/index/edit  would fire the editAction function
+ * <code>
+ * class indexController extends baseController
+ * public function editAction()
+ * {
+ *  
+ * }
+ * </code> 
+ *  
+ * 
   Plugins may override controllers with this scheama. So the order of plugin initalization can effect this.
   
- 
+ *@package DCore
 */
-
-
 class router extends baseClass {
 
 
@@ -51,7 +61,7 @@ class router extends baseClass {
     public $rewriteOn = true;
 
     /**
-     *
+     * Only required if you do not register controllers and place the controller in the default path
      * @set controller directory path
      *
      * @param string $path
@@ -68,14 +78,27 @@ class router extends baseClass {
         /*** set the path ***/
         $this->path = $path;
     }
-
+     /**
+      * sets the controllers url path
+      * 
+      * $controllerName is the added url path to the controller
+      * 
+      * rooturl + $controllerName  
+      * 
+      * @param type $controllerName
+      * @param type $controllerLocal 
+      */
     function setController($controllerName, $controllerLocal) {
         $this->Controllers[$controllerName] = $controllerLocal;
 
     }
 
     /**
-     *
+     * loader is called to:
+     * -  Find the controller
+     * -  Find the action
+     * -  Call the action
+     * 
      * @load the controller
      *
      * @access public
@@ -87,7 +110,7 @@ class router extends baseClass {
         /*** check the route ***/
         $this->getController();
 
-        /*** if the file is not there diaf ***/
+        /*** if the file is not there  ***/
         if (is_readable($this->file) == false) {
             $this->file = $this->path . '/error404.php';
             $this->controller = 'error404';
@@ -114,7 +137,16 @@ class router extends baseClass {
         $controller->$action();
     }
 
-
+    /**
+     *does a redirect using  {@link router::buildUrl()}
+     * 
+     * if $controller_url = '/' then redirects to controller "index"
+     * 
+     * 
+     * @param type $controller_url
+     * @param type $action
+     * @param type $params 
+     */
     public function redirect($controller_url, $action = null, $params = array()) {
     if ($action)
       $controller_url = $this->buildUrl( $controller_url, $action, $params );
@@ -127,7 +159,10 @@ class router extends baseClass {
     }
 
     /**
-     *
+     * bulds a full url directed to the $controller, $action , $params
+     * 
+     * rewrite aware
+     * 
      * @create a url to call a controller
      *
      *
@@ -166,7 +201,16 @@ class router extends baseClass {
 
     /**
      *
-     * @get the controller
+     *      
+     * sets the controller that is pointed to in $_GET['rt']
+     * 
+     * it does not actually return the controll but sets $this->controller , $this->action
+     * 
+     * if no action the index is action called
+     * 
+     * if no controller the index controller
+     * 
+     * @set the controller
      *
      * @access private
      *
@@ -224,4 +268,3 @@ class router extends baseClass {
 
 }
 
-?>
