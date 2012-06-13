@@ -1,5 +1,5 @@
 <?php
-/*
+/**
   +----------------------------------------------------------------------+
   | XHP                                                                  |
   +----------------------------------------------------------------------+
@@ -13,8 +13,13 @@
   | obtain it through the world-wide-web, please send a note to          |
   | license@php.net so we can mail you a copy immediately.               |
   +----------------------------------------------------------------------+
+ * @package XHP
 */
 
+
+/**
+ * 
+ */
 abstract class :x:base {
   abstract public function __construct();
   abstract public function appendChild($child);
@@ -682,7 +687,18 @@ class :x:frag extends :x:primitive {
  * Exceptions are neat.
  */
 class XHPException extends Exception {
-  protected static function getElementName($that) {
+    
+ public function __construct($msg) {
+    
+     
+  
+parent::__construct($msg);
+    DCore::fatalError($msg);
+  }    
+    
+    
+
+    protected static function getElementName($that) {
     $name = get_class($that);
     if (substr($name, 0, 4) !== 'xhp_') {
       return $name;

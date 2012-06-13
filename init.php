@@ -9,10 +9,11 @@
 */
 define ('__FRAMEWORK_PATH', dirname(__FILE__));
 require_once __FRAMEWORK_PATH.'DCore.php';
-include __PROTECTED_PATH . 'config.php';
+global $registry, $CONFIG;
+include __PROTECTED_PATH . '/config.php';
 
-
-
+DCore::setPathOfAlias('lib',__FRAMEWORK_PATH);
+DCore::setPathOfAlias('runtime',__PROTECTED_PATH. '/runtime/');
 require_once __FRAMEWORK_PATH . 'base.php';
 
 $CONFIG_DEFAULT = array(

@@ -54,7 +54,7 @@ class DCore {
     {
         global $CONFIG;
         $paths = explode(':', $path);
-        if (count($paths) > 1) {
+        if ((strlen($paths[0] ) > 1 ) and (count($paths) > 1)) {
             $paths[0] = self::$_aliases[$paths[0]];
 
             $path = implode('/', $paths);
@@ -140,7 +140,7 @@ class DCore {
 
 
                 if (!file_exists($file))
-                    $file = __PROTECTED_PATH . $type . '/' . $view_info[0] . $ext;
+                    $file = __PROTECTED_PATH . $type . '/' . $view_info[1] . $ext;
 
                 if (file_exists($file))
                     return $file;
@@ -181,6 +181,19 @@ class DCore {
      */
     static $classExists = array();
 
+    
+    /**
+     * helper function to return the global registry
+     * @global Registry $registry
+     * @return Registry 
+     */
+    public static function getRegistry()
+    {
+        global $registry;
+        return $registry;
+    }
+    
+    
     /**
      * getPathOfAlias()
      * gets the path of a dcore alias
@@ -225,6 +238,7 @@ class DCore {
             if ($className === '*') {  // a directory
                 self::$_usings[$namespace] = $path;
                 set_include_path(get_include_path() . PATH_SEPARATOR . $path);
+                self::addSearchPath($path);
             } else {  // a file
                 self::$_usings[$namespace] = $path;
                 if (!$checkClassExistence || !class_exists($className, false)) {
@@ -261,7 +275,39 @@ class DCore {
         else
             throw new Exception('alias_invalid' . $alias, $path);
     }
-
+    
+/**
+ * Takes a namespace of a class and loads the php file of that class and returns the classname
+ * 
+ * <code>
+ * 
+ *   $class = DCore::loadClass('lib:cache/apcCache');
+ * 
+ *   $cache = new $class($registry,$options);
+ * 
+ * </code>
+ * 
+ * @param type $classNameSpace
+ * @return type 
+ */    
+static function loadClass($classNameSpace)
+{
+    
+     // see if it can be auto loaded if so just return the class name
+     $file = can_auto_load($classNameSpace);
+     if (!$file)
+     {
+     $file = DCore::getFilePath($classNameSpace);
+     if (file_exists($file))
+         require_once  $file;
+     
+     
+      $classNameSpace = explode(':', $classNameSpace);     
+      $classNameSpace = $classNameSpace[1];
+      }
+      $class = basename($classNameSpace);
+      return $class;
+}
     /**
      * redirects a the browser to an new url 
      * 

@@ -12,7 +12,7 @@ class baseClass
 
 
 /**
- * @var registry
+ * @var  Registry 
  */
  public $registry;
 

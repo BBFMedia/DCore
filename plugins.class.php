@@ -16,7 +16,13 @@
  $this->name = $plugin;
   
  }
-
+  function useDefault()
+  {
+      $class = get_class($this);
+      $controller = str_replace('Plugin', '', $class);
+      $this->registry->router->setController($controller,$controller.':'.$controller);
+      
+  }
   function init()
   {
    $registry = $this->registry;

@@ -10,8 +10,8 @@ Class Registry {
 
     /**
      * Magic properties that are usually connected to registery. To help code complete in most IDE
-     * @property template
-     * @property router
+     * @property Template $template
+     * @property Router $router
      */
 
    /**
@@ -79,12 +79,15 @@ Class Registry {
 
             $alias = $cf['alias'];
             $class = $cf['class'];
+            
+            
             $options = $cf['options'];
 
-            $this->$alias = new $class($this, $options);
+           $class =  DCore::loadClass($class);
+           $this->$alias = new $class($this, $options);
             $this->$alias->init();
         }
-
+        /// load the project init.php file after all modules loaded
         if (file_exists(__PROTECTED_PATH . 'init.php'))
             include __PROTECTED_PATH . 'init.php';
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * 
+ *
  * User: Adrian
  * Date: Mar 11, 2011
  * Time: 4:18:23 PM
@@ -31,20 +31,24 @@ function __autoload($class_name) {
 
 /**
  * checks if the class can be loaded.
- * 
- * 
+ *
+ *
  * @global type $CONFIG
  * @param type $class_name
- * @return boolean|string 
+ * @return boolean|string
  */
 function can_auto_load($class_name)
 {
       global $CONFIG;
       //create filename from classname
+      
+       $class_name = str_replace("xhp_","/",$class_name );
+    	$class_name = str_replace('__','/',$class_name	);
+      
       $filename = $class_name . '.class.php';
       $filename2 = $class_name . '.php';
-
-    // emum   $searchPaths
+     
+ // emum   $searchPaths
       foreach ( $CONFIG['searchPaths'] as $path)
         {
           $file =  rtrim($path,'/\\'). '/'.$filename;

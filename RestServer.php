@@ -375,6 +375,7 @@ class RestServer extends router
 		if ($path[strlen($path) - 1] == '/') {
 			$path = substr($path, 0, -1);
 		}
+                $path = trim($path,'/');
 		// remove trailing format definition, like /controller/action.json -> /controller/action
 		$path = preg_replace('/\.(\w+)$/i', '', $path);
 		return $path;
