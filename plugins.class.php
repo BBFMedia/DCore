@@ -98,12 +98,17 @@
   if (empty($this->pluginPath))
       $this->pluginPath =  $CONFIG['pluginPath'];
   if (empty($this->pluginPath))
-   {
-    $this->pluginPath[]  = __PROTECTED_PATH .'plugins/';
-    $this->pluginPath[]  = __FRAMEWORK_PATH .'core/';
-    }
+    {
+      $this->pluginPath[]  = __PROTECTED_PATH .'plugins/';
+      $this->pluginPath[]  = __FRAMEWORK_PATH .'core/';
+     }
     
-  foreach ($CONFIG['plugins'] as $plugin)
+  $plugins = $CONFIG['plugins'] ;
+  if ($this->registry->router)
+  $this->registry->router->getController();
+  if (isset($CONFIG['controllerPugins'][$this->router->controller] ))
+      $plugins = $CONFIG['controllerPugins'][$this->router->controller];
+  foreach ($plugins as $plugin)
      {
      $this->loadPlugin($plugin );
      }
