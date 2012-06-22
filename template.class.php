@@ -75,7 +75,7 @@ Class template extends baseClass {
     private $views = array();
     private $CSSFiles = array();
     private $JSFiles = array();
-    public $useXHP = false;
+    public $useXHP = true;
 
     /**
       /**

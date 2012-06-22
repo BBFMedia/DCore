@@ -134,7 +134,7 @@ class router extends baseClass {
         // if returns an array then it should return a ajax (maybe json)
         // if returns is empty then do nothing and assume that a templete call wil be fired
         // if neither of these then it should be a xhp object which is hard to check for. And we echo it
-        if ($resultType = 'array')
+        if ($resultType == 'array')
         {
           // todo::  do ajax
         }

@@ -8,6 +8,14 @@
 * @global arrray(string) $searchPaths 
 */
 define ('__FRAMEWORK_PATH', dirname(__FILE__));
+
+
+if (!defined('__ROOT_PATH')) 
+    die('need define const "__ROOT_PATH"');
+if (!defined('__PROTECTED_PATH')) 
+    define ('__PROTECTED_PATH', __ROOT_PATH .'/protected/');
+ 
+
 require_once __FRAMEWORK_PATH.'DCore.php';
 global $registry, $CONFIG;
 include __PROTECTED_PATH . '/config.php';

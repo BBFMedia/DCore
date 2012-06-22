@@ -18,7 +18,7 @@ require_once __FRAMEWORK_PATH . 'controller_base.class.php';
 * @return boolean
  *@package DCore
 */
-function __autoload($class_name) {
+function DCoreAutoload($class_name) {
     $file = can_auto_load($class_name);
            if (file_exists($file))
              {
@@ -28,7 +28,7 @@ function __autoload($class_name) {
 
       return false;
 }
-
+spl_autoload_register('DCoreAutoload');
 /**
  * checks if the class can be loaded.
  *
