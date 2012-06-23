@@ -16,4 +16,3 @@ Abstract Class baseController extends baseClass {
 abstract function index();
 }
 
-?>

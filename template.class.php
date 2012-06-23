@@ -152,8 +152,7 @@ Class template extends baseClass {
 
         if (is_array($view))
             return $view;
-        if (preg_match("/:/", $view))
-            return array($view);
+         return array($view);
 
         return array();
     }

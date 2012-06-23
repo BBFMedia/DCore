@@ -273,7 +273,7 @@ class DCore {
                 throw new Exception('aliasname_invalid' . $alias);
         }
         else
-            throw new Exception('alias_invalid' . $alias, $path);
+            throw new Exception('alias_invalid' . $alias.' '. $path);
     }
     
 /**

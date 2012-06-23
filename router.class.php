@@ -64,7 +64,8 @@ class router extends baseClass {
      */
     function setPath($path)
     {
-
+         if ($path == null)
+             $path = __PROTECTED_PATH .'/controller/';
         /*         * * check if path i sa directory ** */
         if (is_dir($path) == false) {
             throw new Exception('Invalid controller path: `' . $path . '`');
@@ -267,12 +268,15 @@ class router extends baseClass {
 
 
         if (!empty($setControllerPath)) {
-            $this->file = DCore::getFilePAth($setControllerPath . 'Controller', 'controller');
+            $this->file = DCore::getFilePAth( $this->controller . 'Controller', 'controller');
 
             //     __PROTECTED_PATH . 'plugins/' . $Controller_info[0] . '/controller/' . $Controller_info[1] . 'Controller.php';
         }
         else
+        {
+            $this->setPath($this->path);
             $this->file = $this->path . '/' . $this->controller . 'Controller.php';
+        }
     }
 
 }

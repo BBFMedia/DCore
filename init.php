@@ -29,7 +29,13 @@ $CONFIG_DEFAULT = array(
                  'paths' => array('__FRAMEWORK_PATH' =>  __FRAMEWORK_PATH),
                  'searchPaths' => array(__PROTECTED_PATH.'/model/',__FRAMEWORK_PATH,__PROTECTED_PATH.'/modules/'),
 
-                                
+                 'modules'=> array(
+                         'session',
+                         'router',
+                         
+                          'template',
+                        'assetManager',
+                         'plugins',                )
                  );
   
   
