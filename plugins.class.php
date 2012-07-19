@@ -103,7 +103,7 @@
       $this->pluginPath[]  = __FRAMEWORK_PATH .'core/';
      }
     
-
+$plugins = $CONFIG['plugins'];
   if (isset($CONFIG['controllerPugins'][$this->router->controller] ))
       $plugins = $CONFIG['controllerPugins'][$this->router->controller];
   foreach ($plugins as $plugin)
