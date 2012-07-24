@@ -22,6 +22,7 @@ include __PROTECTED_PATH . '/config.php';
 
 DCore::setPathOfAlias('lib',__FRAMEWORK_PATH);
 DCore::setPathOfAlias('runtime',__PROTECTED_PATH. '/runtime/');
+DCore::setPathOfAlias('app',__PROTECTED_PATH. '/');
 require_once __FRAMEWORK_PATH . 'base.php';
 
 $CONFIG_DEFAULT = array(
@@ -30,12 +31,7 @@ $CONFIG_DEFAULT = array(
                  'searchPaths' => array(__PROTECTED_PATH.'/model/',__FRAMEWORK_PATH,__PROTECTED_PATH.'/modules/'),
 
                  'modules'=> array(
-                         'session',
-                         'router',
-                         
-                          'template',
-                        'assetManager',
-                         'plugins',                )
+                                )
                  );
   
   
