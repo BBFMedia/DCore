@@ -226,10 +226,10 @@ Class template extends baseClass {
     function getURLForAsset($filename, $ext)
     {
 
-        $themecheck = explode(':', $filename);
+  /*      $themecheck = explode(':', $filename);
         if ($themecheck[0] == 'theme') {
             $url = URL_THEME . $themecheck[1] . $ext;
-        } else {
+        } else {*/
             $subpaths = explode('!', $filename);
 
             $script = DCore::getFilePath($subpaths[0], '', '', (isset($subpaths[1]) ? '' : $ext));
@@ -238,7 +238,7 @@ Class template extends baseClass {
 
             if (isset($subpaths[1]))
                 $url = $url . $subpaths[1] . $ext;
-        }
+        //}
         return $url;
     }
 

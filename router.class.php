@@ -268,7 +268,7 @@ class router extends baseClass {
 
 
         if (!empty($setControllerPath)) {
-            $this->file = DCore::getFilePAth( $this->controller . 'Controller', 'controller');
+            $this->file = DCore::getFilePAth( $setControllerPath . 'Controller', 'controller');
 
             //     __PROTECTED_PATH . 'plugins/' . $Controller_info[0] . '/controller/' . $Controller_info[1] . 'Controller.php';
         }
