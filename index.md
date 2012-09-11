@@ -1,8 +1,6 @@
 ---
 layout: page
-title: DCore
-intro: A Description
-desctiption: 
+
 ---
 
 DCore is a simple lightweight PHP framework. DCore was never intended to be a 

@@ -1,4 +1,9 @@
 
+source: "/"
+destination: "/"
+lsi: false
+pygments: true
+
 sitename:  DCore
 tagline: PHP Framework
 
