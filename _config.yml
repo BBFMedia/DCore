@@ -7,12 +7,12 @@ pygments: true
 sitename:  DCore
 tagline: PHP Framework
 
-production_url : http://bbfmedia.github.com/DCore/
-url: http://bbfmedia.github.com/DCore/
+production_url : http://dcore.bbfmedia.com/
+url: http://dcore.bbfmedia.com/
 
 safe:        true
 auto:        true
-baseurl:    http://bbfmedia.github.com/DCore/
+baseurl:    http://dcore.bbfmedia.com/
 
 
 future:      false
