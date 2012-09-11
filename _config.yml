@@ -1,23 +1,19 @@
 
-source: "/"
-destination: "/"
-lsi: false
 pygments: true
 
-sitename:  DCore
-tagline: PHP Framework
+sitename:  "DCore"
+tagline: "PHP Framework"
 
-production_url : http://dcore.bbfmedia.com/
-url: http://dcore.bbfmedia.com/
+production_url : "http://dcore.bbfmedia.com/"
+url: "http://dcore.bbfmedia.com/"
 
 safe:        true
 auto:        true
-baseurl:    http://dcore.bbfmedia.com/
+baseurl:    "http://dcore.bbfmedia.com/"
 
 
-pygments:    true
 markdown:    rdiscount
-permalink:   /blog/:year/:month/:day/:title/
+permalink:   "/blog/:year/:month/:day/:title/"
 
 
 
