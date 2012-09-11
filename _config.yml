@@ -15,7 +15,7 @@ pygments:    true
 markdown:    maruku
 permalink:   /blog/:year/:month/:day/:title/
 
-<<<<<<< .mine
+
 
 
 
@@ -31,24 +31,3 @@ navigation:
   layout: archive
 
 
-
-
-=======
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> .theirs
