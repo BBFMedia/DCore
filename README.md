@@ -5,8 +5,11 @@ DCore is a simple lightweight PHP framework. DCore was never intended to be a
 replacement for other frameworks, but has grown to maturity and felt sharing it 
 would not hurt. Plus would force for better code standards and documentation.
 
-Second motive is to create a PHX ( UI framework. The PHX framework would site on top
-of DCore and reply on it. DCore would not depend on the PHX framework.
+Second motive is to create a XHP UI framework. The XHP framework would site on top
+of DCore and reply on it. DCore would not depend on the XHP framework.
+
+Can try the [tutorials](docs/tutorials.md)
+
 
 Status
 =======
@@ -17,8 +20,15 @@ Unit testing is not in the repository but I hope to add them soon.
 
 
 
+
 DCore Archetcture
 ================
+The code is light weight enough that on could step through the execution of the sample 
+application and have a good understanding of the entire project.
+
+Below is a description of the execution made by a DCore apps. "*" files are files in the
+application not in the framework.
+
 ```
 *index.php
  |  DCore               includes DCore 

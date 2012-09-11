@@ -8,8 +8,9 @@ if (!defined('__REROUTE_SUBDOMAIN'))
     define('__REROUTE_SUBDOMAIN', 0);
 
 /**
- * DCore is the base static class for the entire framework.               
- * The DCore frame work revolvers around the static class DCore and       
+ * DCore is the base static class for the entire framework.     
+ *           
+ * The DCore framework revolvers around the static class DCore and       
  * a singlton instance of class global $registry  
  * @package DCore        
  */
