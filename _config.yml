@@ -1,0 +1,5 @@
+safe: true
+source:docs
+destination: pages
+lsi: false
+pygments: true
