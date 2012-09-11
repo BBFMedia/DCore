@@ -5,10 +5,6 @@ intro: A Description
 desctiption: 
 ---
 
-
-DCore
------
-
 DCore is a simple lightweight PHP framework. DCore was never intended to be a 
 replacement for other frameworks, but has grown to maturity and felt sharing it 
 would not hurt. Plus would force for better code standards and documentation.
