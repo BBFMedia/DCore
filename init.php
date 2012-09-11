@@ -1,50 +1,63 @@
 <?php
 
-  /*** auto load model classes ***/
-
 /**
-* array of search paths for autoload
-* this array can be added to in any source file as a global
-* @global arrray(string) $searchPaths 
-*/
-define ('__FRAMEWORK_PATH', dirname(__FILE__));
+ *this file is used to add and set up need framework classes and varibles 
+ *  
+ * @package DCore
+ */
+
+// Define frameworks main paths
+define('__FRAMEWORK_PATH', dirname(__FILE__) . '/core/');
+define('__DCORE', dirname(__FILE__) . '/');
 
 
-if (!defined('__ROOT_PATH')) 
+// ensure that the root path is define/
+// root path is the path that index.php is locationed and usually protect is in.
+if (!defined('__ROOT_PATH'))
     die('need define const "__ROOT_PATH"');
-if (!defined('__PROTECTED_PATH')) 
-    define ('__PROTECTED_PATH', __ROOT_PATH .'/protected/');
- 
+if (!defined('__PROTECTED_PATH'))
+    define('__PROTECTED_PATH', __ROOT_PATH . '/protected/');
 
-require_once __FRAMEWORK_PATH.'DCore.php';
+// include the static singlton DCORE
+require_once dirname(__FILE__) . '/DCore.php';
+
+
+// these are the only two global varables 
 global $registry, $CONFIG;
+
+// include application configuration file
 include __PROTECTED_PATH . '/config.php';
 
-DCore::setPathOfAlias('lib',__FRAMEWORK_PATH);
-DCore::setPathOfAlias('runtime',__PROTECTED_PATH. '/runtime/');
-DCore::setPathOfAlias('app',__PROTECTED_PATH. '/');
+
+// add standard aliases
+DCore::setPathOfAlias('lib', __FRAMEWORK_PATH);
+DCore::setPathOfAlias('DCORE', dirname(__FILE__) . '/');
+DCore::setPathOfAlias('runtime', __PROTECTED_PATH . '/runtime/');
+DCore::setPathOfAlias('app', __PROTECTED_PATH . '/');
+
+// base functions
 require_once __FRAMEWORK_PATH . 'base.php';
 
+
+// A defualt configuration to be merged with the application configuration
+// the application does not overwrite but merges.
 $CONFIG_DEFAULT = array(
-                 'urls' => array('URL_ROOT' => '/' ),
-                 'paths' => array('__FRAMEWORK_PATH' =>  __FRAMEWORK_PATH),
-                 'searchPaths' => array(__PROTECTED_PATH.'/model/',__FRAMEWORK_PATH,__PROTECTED_PATH.'/modules/'),
+    'urls' => array('URL_ROOT' => '/'),
+    'paths' => array('__FRAMEWORK_PATH' => __FRAMEWORK_PATH),
+    'searchPaths' => array(__FRAMEWORK_PATH, __DCORE),
+    'modules' => array(
+    )
+);
 
-                 'modules'=> array(
-                                )
-                 );
-  
-  
-                 
-$CONFIG = merge_config($CONFIG_DEFAULT,$CONFIG);
-  
-define ('URL_ROOT', $CONFIG['urls']['URL_ROOT'] );
-define ('URL_THEME', URL_ROOT .'theme/');
-
- /*** include the controller class ***/
+$CONFIG = merge_config($CONFIG_DEFAULT, $CONFIG);
 
 
- /*** a new registry object ***/
- $registry = new registry;
+// define standard URLS
+define('URL_ROOT', $CONFIG['urls']['URL_ROOT']);
+define('URL_THEME', URL_ROOT . 'theme/');
 
- /*** create the database registry object ***/
+
+
+// creeate the global registry object. 
+$registry = new registry;
+

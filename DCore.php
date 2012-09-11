@@ -11,21 +11,21 @@ if (!defined('__REROUTE_SUBDOMAIN'))
  * DCore is the base static class for the entire framework.               
  * The DCore frame work revolvers around the static class DCore and       
  * a singlton instance of class global $registry  
- * @package DCore          
+ * @package DCore        
  */
 class DCore {
 
     /**
-     *                                                       
-     * will check if the current users can access the passed GUID    
+     * Hard security check  
+     *                                                      
+     * Will check if the current users can access the passed GUID    
      * R = read  M = modify C = comment A add to                     
      * @param guid $guid the guid of the object u are accessing      
      * @param char $access the type of access required               
      * @return  boolean true if allowed                              
      *
      */
-    static function gate($guid, $access = 'R')
-    {
+    static function gate($guid, $access = 'R') {
         return true;
     }
 
@@ -37,8 +37,7 @@ class DCore {
      * @param type $access
      * @return type 
      */
-    static function authFilter($array, $field, $access = 'R')
-    {
+    static function authFilter($array, $field, $access = 'R') {
         return $array;
     }
 
@@ -50,11 +49,10 @@ class DCore {
      * 
      *
      */
-    function addSearchPath($path)
-    {
+    function addSearchPath($path) {
         global $CONFIG;
         $paths = explode(':', $path);
-        if ((strlen($paths[0] ) > 1 ) and (count($paths) > 1)) {
+        if ((strlen($paths[0]) > 1 ) and (count($paths) > 1)) {
             $paths[0] = self::$_aliases[$paths[0]];
 
             $path = implode('/', $paths);
@@ -68,15 +66,14 @@ class DCore {
      * creates a url  that is on a different sub domain
      * 
      * the sub domain can be change with **$alt** . instead of starting the url with  "www." start the url with  $alt
-     * 
+     * this is good for loading images , css etc on different domains.
      * 
      * @param string $url  the url to modify
      * @param string $alt  the sub-domain to use in new url
      * @return string new url
      *
      */
-    function ExpandUrl($url, $alt = null)
-    {
+    function ExpandUrl($url, $alt = null) {
 
         if ((!empty($alt)) and (__REROUTE_SUBDOMAIN)) {
             $domain = $_SERVER['HTTP_HOST'];
@@ -109,8 +106,7 @@ class DCore {
      * @return string  a local system file path
      *
      */
-    function getFilePath($namespace, $type = '', $view_type = 'default', $ext = self::CLASS_FILE_EXT, $throwEx = true)
-    {
+    function getFilePath($namespace, $type = '', $view_type = 'default', $ext = self::CLASS_FILE_EXT, $throwEx = true) {
         if (file_exists(realpath($namespace)))
             return realpath($namespace);
         $view_info = explode(':', $namespace);
@@ -181,19 +177,16 @@ class DCore {
      */
     static $classExists = array();
 
-    
     /**
      * helper function to return the global registry
      * @global Registry $registry
      * @return Registry 
      */
-    public static function getRegistry()
-    {
+    public static function getRegistry() {
         global $registry;
         return $registry;
     }
-    
-    
+
     /**
      * getPathOfAlias()
      * gets the path of a dcore alias
@@ -202,8 +195,7 @@ class DCore {
      * @return string patth of alias
      *
      */
-    public static function getPathOfAlias($alias)
-    {
+    public static function getPathOfAlias($alias) {
         return isset(self::$_aliases[$alias]) ? self::$_aliases[$alias] : null;
     }
 
@@ -213,8 +205,7 @@ class DCore {
      * value is path
      * @return string[] 
      */
-    protected static function getPathAliases()
-    {
+    protected static function getPathAliases() {
         return self::$_aliases;
     }
 
@@ -227,8 +218,7 @@ class DCore {
      * @param boolean whether to check the existence of the class after the class file is included
      * @throws Exception if the namespace is invalid
      */
-    public static function using($namespace, $type = '', $view_type = 'default', $checkClassExistence = true)
-    {
+    public static function using($namespace, $type = '', $view_type = 'default', $checkClassExistence = true) {
         if (isset(self::$_usings[$namespace]) || class_exists($namespace, false))
             return;
         $pos = strrpos($namespace, '/');
@@ -263,8 +253,7 @@ class DCore {
      * @throws TInvalidOperationException if the alias is already defined
      * @throws TInvalidDataValueException if the path is not a valid file path
      */
-    public static function setPathOfAlias($alias, $path)
-    {
+    public static function setPathOfAlias($alias, $path) {
 
         if (($rp = realpath($path)) !== false && is_dir($rp)) {
             if (strpos($alias, '.') === false)
@@ -273,41 +262,46 @@ class DCore {
                 throw new Exception('aliasname_invalid' . $alias);
         }
         else
-            throw new Exception('alias_invalid' . $alias.' '. $path);
+            throw new Exception('alias_invalid' . $alias . ' ' . $path);
     }
-    
-/**
- * Takes a namespace of a class and loads the php file of that class and returns the classname
- * 
- * <code>
- * 
- *   $class = DCore::loadClass('lib:cache/apcCache');
- * 
- *   $cache = new $class($registry,$options);
- * 
- * </code>
- * 
- * @param type $classNameSpace
- * @return type 
- */    
-static function loadClass($classNameSpace)
-{
-    
-     // see if it can be auto loaded if so just return the class name
-     $file = can_auto_load($classNameSpace);
-     if (!$file)
-     {
-     $file = DCore::getFilePath($classNameSpace);
-     if (file_exists($file))
-         require_once  $file;
-     
-     
-      $classNameSpace = explode(':', $classNameSpace);     
-      $classNameSpace = $classNameSpace[1];
-      }
-      $class = basename($classNameSpace);
-      return $class;
-}
+
+    /**
+     * Takes a namespace of a class and loads the php file of that class and returns the classname
+     * 
+     * <code>
+     * 
+     *   $class = DCore::loadClass('lib:cache/apcCache');
+     * 
+     *   $cache = new $class($registry,$options);
+     * 
+     * </code>
+     * 
+     * @param type $classNameSpace
+     * @return type 
+     */
+    static function loadClass($classNameSpace) {
+
+        // see if it can be auto loaded if so just return the class name
+        $file = can_auto_load($classNameSpace);
+        if (!$file) {
+            $file = DCore::getFilePath($classNameSpace);
+            if (file_exists($file))
+                require_once $file;
+
+
+            $classNameSpace = explode(':', $classNameSpace);
+            $classNameSpace = $classNameSpace[1];
+        }
+        else
+            require_once $file;
+
+        $x = strrpos($classNameSpace, "/");
+        if ($x)
+            $classNameSpace = substr($classNameSpace, $x + 1);
+        $class = $classNameSpace;
+        return $class;
+    }
+
     /**
      * redirects a the browser to an new url 
      * 
@@ -316,8 +310,7 @@ static function loadClass($classNameSpace)
      * @param string url to redirect to
      *
      */
-    static function redirect($path)
-    {
+    static function redirect($path) {
         $host = $_SERVER['HTTP_HOST'];
         $uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
         header('Location: http://' . $host . $uri . '/' . $path);
@@ -329,8 +322,7 @@ static function loadClass($classNameSpace)
      * @param type $msg
      * @return type 
      */
-    public static function fatalError($msg)
-    {
+    public static function fatalError($msg) {
         echo '<h1>DCore Fatal Error</h1>';
         echo '<p>' . $msg . '</p>';
         if (!function_exists('debug_backtrace'))

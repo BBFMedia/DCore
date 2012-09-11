@@ -38,7 +38,7 @@
  * 
   Plugins may override controllers with this scheama. So the order of plugin initalization can effect this.
 
- * @package DCore
+ * @package DCore/core
  */
 class router extends baseClass {
     /*
@@ -62,10 +62,9 @@ class router extends baseClass {
      * @return void
      *
      */
-    function setPath($path)
-    {
-         if ($path == null)
-             $path = __PROTECTED_PATH .'/controller/';
+    function setPath($path) {
+        if ($path == null)
+            $path = __PROTECTED_PATH . '/controller/';
         /*         * * check if path i sa directory ** */
         if (is_dir($path) == false) {
             throw new Exception('Invalid controller path: `' . $path . '`');
@@ -84,9 +83,12 @@ class router extends baseClass {
      * @param type $controllerName
      * @param type $controllerLocal 
      */
-    function setController($controllerName, $controllerLocal)
-    {
+    function setController($controllerName, $controllerLocal) {
         $this->Controllers[$controllerName] = $controllerLocal;
+    }
+
+    public function addService($class, $basePath = '') {
+        
     }
 
     /**
@@ -102,8 +104,7 @@ class router extends baseClass {
      * @return void
      *
      */
-    public function loader()
-    {
+    public function loader() {
         /*         * * check the route ** */
         $this->getController();
 
@@ -130,22 +131,18 @@ class router extends baseClass {
 
         $result = $controller->$action();
         $resultType = gettype($result);
-        
+
         // $result can only have three result types
         // if returns an array then it should return a ajax (maybe json)
         // if returns is empty then do nothing and assume that a templete call wil be fired
         // if neither of these then it should be a xhp object which is hard to check for. And we echo it
-        if ($resultType == 'array')
-        {
-          // todo::  do ajax
-        }
-        else if (!empty($result ))
-        {
+        if ($resultType == 'array') {
+            // todo::  do ajax
+        } else if (!empty($result)) {
             echo $result;
-        } 
-        
+        }
+
         return $result;
-        
     }
 
     /**
@@ -158,8 +155,7 @@ class router extends baseClass {
      * @param type $action
      * @param type $params 
      */
-    public function redirect($controller_url, $action = null, $params = array())
-    {
+    public function redirect($controller_url, $action = null, $params = array()) {
         if ($action)
             $controller_url = $this->buildUrl($controller_url, $action, $params);
         if ($controller_url == '/')
@@ -181,8 +177,7 @@ class router extends baseClass {
      * @return string
      *
      */
-    public function buildUrl($controller, $action = null, $params = array())
-    {
+    public function buildUrl($controller, $action = null, $params = array()) {
         if ($action)
             $url = $controller . '/' . $action;
         else if (count($params))
@@ -225,8 +220,7 @@ class router extends baseClass {
      * @return void
      *
      */
-    private function getController()
-    {
+    private function getController() {
 
         /*         * * get the route from the url ** */
         $route = (empty($_GET['rt'])) ? '' : $_GET['rt'];
@@ -254,7 +248,7 @@ class router extends baseClass {
         if (empty($this->controller)) {
             $this->controller = 'index';
         }
-        
+
 
 
         /*         * * Get action ** */
@@ -268,12 +262,10 @@ class router extends baseClass {
 
 
         if (!empty($setControllerPath)) {
-            $this->file = DCore::getFilePAth( $setControllerPath . 'Controller', 'controller');
+            $this->file = DCore::getFilePAth($setControllerPath . 'Controller', 'controller');
 
             //     __PROTECTED_PATH . 'plugins/' . $Controller_info[0] . '/controller/' . $Controller_info[1] . 'Controller.php';
-        }
-        else
-        {
+        } else {
             $this->setPath($this->path);
             $this->file = $this->path . '/' . $this->controller . 'Controller.php';
         }

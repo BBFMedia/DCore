@@ -1,5 +1,5 @@
 <?php
-
+global
 
 $CONFIG = array(
                  'urls' => array('URL_ROOT' => '/'),

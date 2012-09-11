@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Regsitry is a global call that is used to hold all framework varables such as modules.
+ * 
+ * 
+ * @package DCore/core 
+ */
 Class Registry {
     /*
      * @the vars array
@@ -14,8 +20,8 @@ Class Registry {
      * @property Router $router
      */
 
-   /**
-    * Typical __set setter for assigning any value to registry
+    /**
+     * Typical __set setter for assigning any value to registry
      *
      * @set undefined vars
      *
@@ -26,8 +32,7 @@ Class Registry {
      * @return void
      *
      */
-    public function __set($index, $value)
-    {
+    public function __set($index, $value) {
         $this->vars[$index] = $value;
     }
 
@@ -40,30 +45,29 @@ Class Registry {
      * @return mixed
      *
      */
-    public function __get($index)
-    {
+    public function __get($index) {
         return $this->vars[$index];
     }
-   /**
-    *Loads all the modules in $CONFIG['modules']
-    * 
-    * the elements in the array of $CONFIG['modules'] each the modules configuration proerties
-    * 
-    * <code>
-    * array( 'class' => "" , //string class name. if empty the then use key
-    *        'alias' => "" , // the name used to name the value set in regisrty
-    *        'option' => array() , // an array sent to the module to set module specific params
-    *       )
-    * </code>
-    * 
-    * will create each module in order and call the modules ->init() function
-    * 
-    * before returning call  <code> __PROTECTED_PATH . 'init.php';</code> if file exists
-    * 
-    * @global array[] $CONFIG['modules'] 
-    */
-    public function load()
-    {
+
+    /**
+     * Loads all the modules in $CONFIG['modules']
+     * 
+     * the elements in the array of $CONFIG['modules'] each the modules configuration proerties
+     * 
+     * <code>
+     * array( 'class' => "" , //string class name. if empty the then use key
+     *        'alias' => "" , // the name used to name the value set in regisrty
+     *        'option' => array() , // an array sent to the module to set module specific params
+     *       )
+     * </code>
+     * 
+     * will create each module in order and call the modules ->init() function
+     * 
+     * before returning call  <code> __PROTECTED_PATH . 'init.php';</code> if file exists
+     * 
+     * @global array[] $CONFIG['modules'] 
+     */
+    public function load() {
         global $CONFIG;
 
         $mods = $CONFIG['modules'];
@@ -79,12 +83,12 @@ Class Registry {
 
             $alias = $cf['alias'];
             $class = $cf['class'];
-            
-            
+
+
             $options = $cf['options'];
 
-           $class =  DCore::loadClass($class);
-           $this->$alias = new $class($this, $options);
+            $class = DCore::loadClass($class);
+            $this->$alias = new $class($this, $options);
             $this->$alias->init();
         }
         /// load the project init.php file after all modules loaded

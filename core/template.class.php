@@ -61,7 +61,7 @@
   the controller would call this to set its view
 
 
-
+* @package DCore/core
  * ******** */
 
 Class template extends baseClass {
@@ -99,18 +99,15 @@ Class template extends baseClass {
      * @return void
      *
      */
-    public function __get($index)
-    {
+    public function __get($index) {
         return $this->vars[$index];
     }
 
-    public function __set($index, $value)
-    {
+    public function __set($index, $value) {
         $this->vars[$index] = $value;
     }
 
-    function __construct($registry, $options = null)
-    {
+    function __construct($registry, $options = null) {
         parent::__construct($registry, $options);
         if (isset($options['useXHP']))
             $this->useXHP = $options['useXHP'];
@@ -118,29 +115,25 @@ Class template extends baseClass {
             $this->view_type = $options['view_type'];
 
         if ($this->useXHP)
-            require_once(dirname(__FILE__) . '/php-lib/init.php');
+            DCORE::using('DCORE:php-lib/init');
     }
 
-    function setViewType($viewtype)
-    {
+    function setViewType($viewtype) {
         $this->view_type = $viewtype;
     }
 
-    function addView($view, $view_path, $view_type = 'default')
-    {
+    function addView($view, $view_path, $view_type = 'default') {
         if (empty($this->views[$view_type][$view]))
             $this->setView($view, $view_path, $view_type);
         else
             $this->views[$view_type][$view][] = $view_path;
     }
 
-    function setView($view, $view_path, $view_type = 'default')
-    {
+    function setView($view, $view_path, $view_type = 'default') {
         $this->views[$view_type][$view] = array($view_path);
     }
 
-    function getView($name, $view_type = null)
-    {
+    function getView($name, $view_type = null) {
         if (empty($viewtype))
             $view_type = $this->view_type;
         if (isset($this->views[$view_type][$name]))
@@ -152,13 +145,12 @@ Class template extends baseClass {
 
         if (is_array($view))
             return $view;
-         return array($view);
+        return array($view);
 
         return array();
     }
 
-    function render($name, $vars_data = null, $cached = false)
-    {
+    function render($name, $vars_data = null, $cached = false) {
         //   $view_root =  __PROTECTED_PATH ;
         // Load variables
         foreach ($this->vars as $key => $value) {
@@ -182,11 +174,11 @@ Class template extends baseClass {
             foreach ($views as $view) {
                 $path = false;
                 // the twig code never tested and not yet used
-                
+
                 if (defined(__USE_TWIG)) {
                     $path = DCore::getFilePAth($view, 'views', $this->view_type, '.twig', false);
                 }
-                
+
                 // if twig file exists then use a twig template
                 // this could be expanded to smarty
                 if ($path) {
@@ -218,32 +210,29 @@ Class template extends baseClass {
         return $content;
     }
 
-    function show($name)
-    {
+    function show($name) {
         $this->setView('contents', $name);
     }
 
-    function getURLForAsset($filename, $ext)
-    {
+    function getURLForAsset($filename, $ext) {
 
-  /*      $themecheck = explode(':', $filename);
-        if ($themecheck[0] == 'theme') {
-            $url = URL_THEME . $themecheck[1] . $ext;
-        } else {*/
-            $subpaths = explode('!', $filename);
+        /*      $themecheck = explode(':', $filename);
+          if ($themecheck[0] == 'theme') {
+          $url = URL_THEME . $themecheck[1] . $ext;
+          } else { */
+        $subpaths = explode('!', $filename);
 
-            $script = DCore::getFilePath($subpaths[0], '', '', (isset($subpaths[1]) ? '' : $ext));
+        $script = DCore::getFilePath($subpaths[0], '', '', (isset($subpaths[1]) ? '' : $ext));
 
-            $url = $this->registry->assetManager->publishFilePath($script);
+        $url = $this->registry->assetManager->publishFilePath($script);
 
-            if (isset($subpaths[1]))
-                $url = $url . $subpaths[1] . $ext;
+        if (isset($subpaths[1]))
+            $url = $url . $subpaths[1] . $ext;
         //}
         return $url;
     }
 
-    function addJS($filename)
-    {
+    function addJS($filename) {
 
         if (empty($this->JSFiles[$filename])) {
             $url = $this->getURLForAsset($filename, '.js');
@@ -251,8 +240,7 @@ Class template extends baseClass {
         }
     }
 
-    function addCSS($filename, $media = '')
-    {
+    function addCSS($filename, $media = '') {
 
         if (empty($this->CSSFiles[$filename])) {
             $url = $this->getURLForAsset($filename, '.css');
@@ -261,8 +249,7 @@ Class template extends baseClass {
         }
     }
 
-    function renderCSS($build = 0)
-    {
+    function renderCSS($build = 0) {
         $result = '';
         $dir = trim(URL_ROOT . 'assets', '/');
         if ($this->registry->debugMode) {
@@ -290,8 +277,7 @@ Class template extends baseClass {
         return $result;
     }
 
-    function renderJS($build = 0)
-    {
+    function renderJS($build = 0) {
 
         if ($this->registry->debugMode) {
 
