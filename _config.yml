@@ -1,5 +1,6 @@
 safe: true
-source:docs
-destination: pages
+source: "docs"
+destination: "pages"
 lsi: false
 pygments: true
+auto: true
