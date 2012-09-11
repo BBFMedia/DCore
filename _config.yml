@@ -1,5 +1,34 @@
-safe: true
-source:docs
-destination: pages
-lsi: false
-pygments: true
+
+sitename:  DCore
+tagline: PHP Framework
+
+production_url : http://bbfmedia.github.com/DCore/
+url: http://bbfmedia.github.com/DCore/
+
+safe:        true
+auto:        true
+baseurl:    http://bbfmedia.github.com/DCore/
+
+
+future:      false
+pygments:    true
+markdown:    maruku
+permalink:   /blog/:year/:month/:day/:title/
+
+
+
+
+navigation:
+- text: Home
+  url: /
+  layout: default  
+- text: About us
+  url: /about/
+  layout: page  
+- text: Blog
+  url: /blog/
+  layout: archive
+
+
+
+
