@@ -33,7 +33,8 @@ application and have a good understanding of the entire project.
 Below is a description of the execution made by a DCore apps. "*" files are files in the
 application not in the framework.
 
-{% highlight %}
+<pre>
+<code>
 *index.php
  |  DCore               includes DCore 
  |  |                   DCore include *'config.php' in you application
@@ -59,4 +60,5 @@ application not in the framework.
  |  |    view            renders view              
  |
  |                      index.php eachos out the view
- {% endhighlight %}
+ </code>
+ </pre>
