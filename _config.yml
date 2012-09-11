@@ -15,9 +15,8 @@ auto:        true
 baseurl:    http://dcore.bbfmedia.com/
 
 
-future:      false
-pygments2:    true
-markdown2:    maruku
+pygments:    true
+markdown:    rdiscount
 permalink:   /blog/:year/:month/:day/:title/
 
 
