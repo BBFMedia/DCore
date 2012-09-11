@@ -445,6 +445,9 @@ footer a:hover {
     font-size: 13px;
     display: inline;
   }
+  .page-intro {
+  font-family: 'Life Savers', 'Helvetica Neue', Helvetica, Arial, serif;
+  }
   #main-content,
   aside#sidebar {
     float: none;
