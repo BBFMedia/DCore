@@ -236,15 +236,20 @@ class router extends baseClass {
             }
         }
         $index = 2;
+        if (!$this->registry->request)
+            $this->registry->request = new request();
+        $this->registry->request->addPOST($_POST);
         // check if template is even loaded
         // a pure xhp app may not need to load it
         if ($this->registry->template) {
             while (count($parts) > $index + 1) {
                 $cc = ('get_' . $parts[$index]);
+                $this->registry->request->setGET($parts[$index],$parts[$index + 1]);
                 $this->registry->template->$cc = $parts[$index + 1];
                 $index += 2;
             }
         }
+        
         if (empty($this->controller)) {
             $this->controller = 'index';
         }

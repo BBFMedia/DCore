@@ -8,7 +8,7 @@ would not hurt. Plus would force for better code standards and documentation.
 Second motive is to create a XHP UI framework. The XHP framework would site on top
 of DCore and reply on it. DCore would not depend on the XHP framework.
 
-Can try the [tutorials](docs/tutorials.md)
+Can try the [tutorials](http://dcode.bbfmedia.com/docs/tutorials.md)
 
 
 Status

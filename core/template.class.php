@@ -100,7 +100,9 @@ Class template extends baseClass {
      *
      */
     public function __get($index) {
+        if (isset($this->vars[$index]))
         return $this->vars[$index];
+        return null;
     }
 
     public function __set($index, $value) {
@@ -108,6 +110,8 @@ Class template extends baseClass {
     }
 
     function __construct($registry, $options = null) {
+       
+        $this->vars = array();
         parent::__construct($registry, $options);
         if (isset($options['useXHP']))
             $this->useXHP = $options['useXHP'];

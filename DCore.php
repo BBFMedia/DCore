@@ -15,7 +15,7 @@ if (!defined('__REROUTE_SUBDOMAIN'))
  * @package DCore        
  */
 class DCore {
-
+   
     /**
      * Hard security check  
      *                                                      
