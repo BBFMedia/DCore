@@ -86,7 +86,12 @@ class router extends baseClass {
     function setController($controllerName, $controllerLocal) {
         $this->Controllers[$controllerName] = $controllerLocal;
     }
-
+/**
+ * Dummy function when not making a REST request
+ * 
+ * @param type $class
+ * @param type $basePath 
+ */
     public function addService($class, $basePath = '') {
         
     }

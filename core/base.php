@@ -2,10 +2,7 @@
 
 /**
  *
- * User: Adrian
- * Date: Mar 11, 2011
- * Time: 4:18:23 PM
- * To change this template use File | Settings | File Templates.
+ * @package DCore/core
  */
 define('DIRECTORY_SEPARATOR', '/');
 require_once __FRAMEWORK_PATH . 'baseClass.class.php';
