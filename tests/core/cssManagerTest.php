@@ -81,10 +81,20 @@ class cssManagerTest extends PHPUnit_Framework_TestCase {
    */
   public function testRender() {
     $src = '
-     @import colors.scss;  
+     @import local_colors.scss;  
 
  ';
-    $this->object->render($src,false);
+    
+    $this->object->addCSS('D:\code\SLCode\Opti\sl\themes\SLTheme\css\common.scss');
+    $this->object->addCSS('D:\code\SLCode\Opti\sl\themes\SLTheme\css\form.scss');
+    
+    $links = $this->object->getLinks();
+   
+    
+    $result = $this->object->render($links);
+    
+    
+   
   }
   public function testUdihash()
   {
