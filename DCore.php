@@ -6,6 +6,11 @@ if (!defined('DCORE'))
     define('DCORE', dirname(__FILE__));
 if (!defined('__REROUTE_SUBDOMAIN'))
     define('__REROUTE_SUBDOMAIN', 0);
+if (!defined('__SASS_PATH'))
+    define('__SASS_PATH', dirname(__FILE__).'/sass');
+
+
+
 
 /**
  * DCore is the base static class for the entire framework.     
