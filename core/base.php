@@ -60,7 +60,7 @@ function can_auto_load($class_name) {
         //include class source file if found
         if (DCORE::file_exists($file)) {
             return ($file);
-        
+        } 
     }
     return false;
 }

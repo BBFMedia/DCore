@@ -21,6 +21,13 @@ if (!defined('__SASS_PATH'))
  */
 class DCore {
    
+    
+    /**
+     *
+     * @var cache
+     */
+    static public $cache = null;
+    static private $_fileCache = null;
     /**
      * Hard security check  
      *                                                      
@@ -308,11 +315,24 @@ class DCore {
         return $class;
     }
 
-    static function file_exists($filename)
-    {
-        
-             $filename = str_replace(array('//','\\'), '/', $filename);
-	    return  file_exists($filename);
+    static function file_exists($filename) {
+        if (isset(self::$cache)) {
+            if (!isset(self::$_fileCache))
+                self::$fileCache = self::$cache->get('DCore::file_exists');
+            if (!isset(self::$fileCache))
+                self::$fileCache = array();
+            if (isset(self::$_fileCache [md5($filename)])) {
+                return self::$_fileCache [md5($filename)];
+            }
+        }
+
+        $filename = str_replace(array('//', '\\'), '/', $filename);
+        $result = file_exists($filename);
+        if (isset(self::$_fileCache)) {
+            self::$_fileCache [md5($filename)] = $result;
+            self::$cache->set('DCore::file_exists', self::$_fileCache);
+        }
+        return $result;
     }
     /**
      * redirects a the browser to an new url 
