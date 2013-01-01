@@ -16,5 +16,4 @@ $xhprofile = new xhprofile((dirname(__DCORE)).'/xhprof/');
 
 
  $registry->router->loader();
- echo $registry->template->render('helloworld:layout');
 $xhprofile->finalize();

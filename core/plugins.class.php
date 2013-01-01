@@ -89,6 +89,8 @@ class plugins extends baseClass {
             if (empty($this->_loadedPlugins[$plug])) {
                 echo('plugin ' . $plug->name . ' required');
                 var_dump($plugs);
+                echo('loaded plugins');
+                var_dump($this->_loadedPlugins);   
                 die();
             }
         }

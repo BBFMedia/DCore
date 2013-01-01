@@ -8,12 +8,10 @@ class :hello:layout extends :ui:root {
     function render()
     {
     return 
-        <html>
-        <head>
-        </head>
+
      <body>
     {$this->getChildren()}
         </body>
-    </html>;
+;
     }
 }

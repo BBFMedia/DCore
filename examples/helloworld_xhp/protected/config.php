@@ -8,7 +8,7 @@ $CONFIG = array(
                  'modules'=> array(
                          'session',
                          'router' ,
-                     'template' => array('options'=> array('useXHP'=>0)),    
+                     'template',    
                      'plugins',
                         
                           ),

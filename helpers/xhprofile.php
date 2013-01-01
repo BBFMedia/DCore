@@ -26,8 +26,8 @@ $xhprof_data = xhprof_disable();
 
 //realpath($CONFIG['libpath'] .'/xhprof');
 $XHPROF_ROOT = $this->path;
-include_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_lib.php";
-include_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_runs.php";
+include_once $XHPROF_ROOT . "xhprof_lib/utils/xhprof_lib.php";
+include_once $XHPROF_ROOT . "xhprof_lib/utils/xhprof_runs.php";
 
 // save raw data for this profiler run using default
 // implementation of iXHProfRuns.
@@ -35,12 +35,8 @@ $xhprof_runs = new XHProfRuns_Default();
 
 // save the run under a namespace "xhprof_foo"
 $run_id = $xhprof_runs->save_run($xhprof_data, "xhprof_foo");  
+echo $run_id;
 
-echo "---------------\n".
-     "Assuming you have set up the http based UI for \n".
-     "XHProf at some address, you can view run at \n".
-     "http://<xhprof-ui-address>/index.php?run=$run_id&source=xhprof_foo\n".
-     "---------------\n";
     }
     
     

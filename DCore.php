@@ -113,7 +113,7 @@ class DCore {
      *
      */
     function getFilePath($namespace, $type = '', $view_type = 'default', $ext = self::CLASS_FILE_EXT, $throwEx = true) {
-        if (file_exists(realpath($namespace)))
+        if (DCORE::file_exists(realpath($namespace)))
             return realpath($namespace);
         $view_info = explode(':', $namespace);
         if (count($view_info) > 1) {
@@ -122,18 +122,18 @@ class DCore {
             if (empty($plugpath)) {
                 $plugpath = __PROTECTED_PATH . 'plugins/' . $view_info[0];
 
-                if (!file_exists(realpath($plugpath)))
+                if (!DCORE::file_exists(realpath($plugpath)))
                     $plugpath = __FRAMEWORK_PATH . 'core/' . $view_info[0] . '/';
             }
 
             if ($type == 'views') {
                 $file = $plugpath . '/' . $type . '/' . $view_type . '/' . $view_info[1] . $ext;
-                if (!file_exists($file))
+                if (!DCORE::file_exists($file))
                     $file = $plugpath . '/' . $type . '/default/' . $view_info[1] . $ext;
-                if (!file_exists($file))
+                if (!DCORE::file_exists($file))
                     $file = $plugpath . '/' . $type . '/' . $view_info[1] . $ext;
 
-                if (file_exists($file))
+                if (DCORE::file_exists($file))
                     return $file;
             }
             else {
@@ -141,20 +141,20 @@ class DCore {
 
 
 
-                if (!file_exists($file))
+                if (!DCORE::file_exists($file))
                     $file = __PROTECTED_PATH . $type . '/' . $view_info[1] . $ext;
 
-                if (file_exists($file))
+                if (DCORE::file_exists($file))
                     return $file;
             }
         }
         else {
             $file = __PROTECTED_PATH . $type . '/' . $namespace . $ext;
 
-            if (file_exists($file))
+            if (DCORE::file_exists($file))
                 return $file;
         }
-        if (file_exists($file) == false) {
+        if (DCORE::file_exists($file) == false) {
 
             if ($throwEx)
                 throw new Exception('Path not found in ' . $namespace);
@@ -268,7 +268,7 @@ class DCore {
                 throw new Exception('aliasname_invalid' . $alias);
         }
         else
-            throw new Exception('alias_invalid' . $alias . ' ' . $path);
+            throw new Exception('alias_invalid ' . $alias . ' ' . $path);
     }
 
     /**
@@ -291,7 +291,7 @@ class DCore {
         $file = can_auto_load($classNameSpace);
         if (!$file) {
             $file = DCore::getFilePath($classNameSpace);
-            if (file_exists($file))
+            if (DCORE::file_exists($file))
                 require_once $file;
 
 
@@ -308,6 +308,12 @@ class DCore {
         return $class;
     }
 
+    static function file_exists($filename)
+    {
+        
+             $filename = str_replace(array('//','\\'), '/', $filename);
+	    return  file_exists($filename);
+    }
     /**
      * redirects a the browser to an new url 
      * 
