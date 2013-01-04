@@ -77,6 +77,14 @@ namespace cache;
 
 abstract class base extends \baseClass {
 
+    
+        function __construct($registry, $options = null) {
+        parent::__construct($registry, $options);
+        if (!empty($options['DCoreCache']))
+           \DCORE::$cache = $this;
+    }
+
+    
     function loadCache($cachelist) {
         if (!is_array($cachelist))
             $cachelist = arrray($cachelist);

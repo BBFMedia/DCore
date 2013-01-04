@@ -316,17 +316,21 @@ class DCore {
     }
 
     static function file_exists($filename) {
+        if (empty($filename ))
+            return false;
+        
+    $filename = str_replace(array('//', '\\'), '/', $filename);
         if (isset(self::$cache)) {
             if (!isset(self::$_fileCache))
-                self::$fileCache = self::$cache->get('DCore::file_exists');
-            if (!isset(self::$fileCache))
-                self::$fileCache = array();
+                self::$_fileCache = self::$cache->get('DCore::file_exists');
+            if (!isset(self::$_fileCache))
+                self::$_fileCache = array();
             if (isset(self::$_fileCache [md5($filename)])) {
                 return self::$_fileCache [md5($filename)];
             }
         }
 
-        $filename = str_replace(array('//', '\\'), '/', $filename);
+       
         $result = file_exists($filename);
         if (isset(self::$_fileCache)) {
             self::$_fileCache [md5($filename)] = $result;

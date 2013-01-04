@@ -5,8 +5,8 @@
  * @package DCore/core
  */
 define('DIRECTORY_SEPARATOR', '/');
-require_once __FRAMEWORK_PATH . 'baseClass.class.php';
-require_once __FRAMEWORK_PATH . 'controller_base.class.php';
+require_once __FRAMEWORK_PATH . 'baseClass.php';
+require_once __FRAMEWORK_PATH . 'controller_base.php';
 
 /**
   }
