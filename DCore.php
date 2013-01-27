@@ -322,7 +322,7 @@ class DCore {
     $filename = str_replace(array('//', '\\'), '/', $filename);
         if (isset(self::$cache)) {
             if (!isset(self::$_fileCache))
-                self::$_fileCache = self::$cache->get('DCore::file_exists');
+                self::$_fileCache = array();//self::$cache->get('DCore::file_exists');
             if (!isset(self::$_fileCache))
                 self::$_fileCache = array();
             if (isset(self::$_fileCache [md5($filename)])) {

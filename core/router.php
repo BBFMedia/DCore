@@ -83,7 +83,9 @@ class router extends baseClass {
      * @param type $controllerName
      * @param type $controllerLocal 
      */
-    function setController($controllerName, $controllerLocal) {
+    function setController($controllerName, $controllerLocal = null) {
+		if ( $controllerLocal == null)
+			 $controllerLocal = $controllerName.':'.$controllerName;
         $this->Controllers[$controllerName] = $controllerLocal;
     }
 /**
