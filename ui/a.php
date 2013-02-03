@@ -41,7 +41,7 @@ class :ui:a extends :ui:element {
        $url = $this->registry->router->buildURL($controller,$action,$params);
         $this->setAttribute('href',$url);
        } 
-       else if (preg_match("/^dcore[:]/i",$href)) 
+       else if ((!preg_match("/[:]\/\//i",$href) ) and (substr($href,0,1) != "/"))
        {
            $params = explode('/',substr($href,6,10000000));
            $controller = $params[0];

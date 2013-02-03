@@ -24,7 +24,7 @@ class :ui:select extends :ui:root {
     $id = $this->getAttribute('id');
     $class = $this->getAttribute('class');
    $result = 
-    <select class={$class} />;
+    <select class={$class} name={$name} id={$id}/>;
     foreach($options as $id => $option)
     {
       
