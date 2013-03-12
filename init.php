@@ -17,6 +17,8 @@ if (!defined('__ROOT_PATH'))
     die('need define const "__ROOT_PATH"');
 if (!defined('__PROTECTED_PATH'))
     define('__PROTECTED_PATH', __ROOT_PATH . '/protected/');
+if (!defined('__TEMP_PATH'))
+    define('__TEMP_PATH', __ROOT_PATH . '/protected/runtime/temp/');
 
 // include the static singlton DCORE
 require_once dirname(__FILE__) . '/DCore.php';

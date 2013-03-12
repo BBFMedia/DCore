@@ -5,8 +5,8 @@
  * @package DCore/core
  */
 define('DIRECTORY_SEPARATOR', '/');
-require_once __FRAMEWORK_PATH . 'baseClass.class.php';
-require_once __FRAMEWORK_PATH . 'controller_base.class.php';
+require_once __FRAMEWORK_PATH . 'baseClass.php';
+require_once __FRAMEWORK_PATH . 'controller_base.php';
 
 /**
   }
@@ -48,16 +48,19 @@ function can_auto_load($class_name) {
 
     // emum   $searchPaths
     foreach ($CONFIG['searchPaths'] as $path) {
-        $file = rtrim($path, '/\\') . '/' . $filename;
-        //include class source file if found
-        if (file_exists($file)) {
+        
+        
+       $file = str_replace(array('//','\\'), '/', $path.'/'. $filename);
+          //include class source file if found
+        if (DCORE::file_exists($file)) {
             return ($file);
         }
-        $file = rtrim($path, '/\\') . '/' . $filename2;
+        $file = str_replace(array('//','\\'), '/', $path.'/'.  $filename2);
+        
         //include class source file if found
-        if (file_exists($file)) {
+        if (DCORE::file_exists($file)) {
             return ($file);
-        }
+        } 
     }
     return false;
 }

@@ -1,5 +1,6 @@
 <?php
 
+namespace cache;
 /**
  * an APC version of cache
  * 
@@ -8,7 +9,7 @@
  * @package DCore.cache
  *  
  */
-class apcCache extends cache {
+class apcCache extends base {
 
     /**
      * Initializes this module.
