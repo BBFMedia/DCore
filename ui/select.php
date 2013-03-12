@@ -24,11 +24,11 @@ class :ui:select extends :ui:root {
     $id = $this->getAttribute('id');
     $class = $this->getAttribute('class');
    $result = 
-    <select class={$class} />;
+    <select class={$class} name={$name}/>;
     foreach($options as $id => $option)
     {
       
-         $item = <option value={$id}>{$option}</option> ;
+         $item = <option value={$id} >{$option}</option> ;
         if ($id == $selected)
             $item->setAttribute("selected","selected");
     $result->appendChild($item);
