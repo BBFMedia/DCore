@@ -28,7 +28,7 @@ class :ui:select extends :ui:root {
     foreach($options as $id => $option)
     {
       
-         $item = <option value={$id}>{$option}</option> ;
+         $item = <option value={$id} >{$option}</option> ;
         if ($id == $selected)
             $item->setAttribute("selected","selected");
     $result->appendChild($item);
