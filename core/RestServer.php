@@ -176,7 +176,7 @@ class RestServer extends router {
             $result = array_merge($this->registry->restData, $result);
             if ($result !== null) {
                 $this->sendData($result);
-            }
+            } 
         } else {
             $this->handleError(404);
         }
@@ -424,7 +424,7 @@ class RestServer extends router {
             $deserializer = new Zend_Amf_Parse_Amf3_Deserializer($stream);
             $data = $deserializer->readTypeMarker();
         } else {
-            $data = json_decode($data);
+            $data = json_decode($data,true);
         }
 
         return $data;
