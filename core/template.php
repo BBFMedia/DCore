@@ -179,15 +179,16 @@ Class template extends baseClass {
                 $path = false;
                 // the twig code never tested and not yet used
 
-                if (defined(__USE_TWIG)) {
+                if (DCore::getPathOfAlias('twig')) {
                     $path = DCore::getFilePAth($view, 'views', $this->view_type, '.twig', false);
                 }
-
+                ob_start();
                 // if twig file exists then use a twig template
                 // this could be expanded to smarty
                 if ($path) {
                     $twig = new DTwig();
-                    $content .= $twig->render($path, $this, $vars);
+                    $twig->init();
+                     $twig->render($path, $this, $vars);
                     unset($twig);
                 } else {
                     $path = DCore::getFilePAth($view, 'views', $this->view_type);
@@ -195,11 +196,12 @@ Class template extends baseClass {
                         throw new Exception('Template not found in ' . $path);
                         return false;
                     }
-                    ob_start();
+
 
                     include ($path);
-                    $content .= ob_get_contents();
                 }
+                    $content .= ob_get_contents();
+
                 ob_end_clean();
             }
 
