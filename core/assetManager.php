@@ -88,8 +88,8 @@ class assetManager extends baseClass {
      * @param TXmlElement module configuration
      */
     public function init($options = null, $url = null) {
-        if (!is_writable($this->_basePath) || !is_dir($this->_basePath))
-            throw new Exception('Asset Foloder must exists at ' . $this->_basePath);
+
+
     }
 
     function __construct($registry, $options = null) {
@@ -103,7 +103,8 @@ class assetManager extends baseClass {
         if ($options['checktimestamp'])
             $this->_checkTimestamp = !empty($options['checktimestamp']);
         parent::__construct($registry);
-        $this->init($this->_basePath, $this->_baseUrl);
+        if (!is_writable($this->_basePath) || !is_dir($this->_basePath))
+            throw new Exception('Asset Foloder must exists at ' . $this->_basePath);
     }
 
     /**

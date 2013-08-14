@@ -15,9 +15,9 @@ Class Registry {
     private $vars = array();
 
     /**
-     * Magic properties that are usually connected to registery. To help code complete in most IDE
-     * @property Template $template
-     * @property Router $router
+     * Magic properties that are usually connected to registry. To help code complete in most IDE
+     * @property template $template
+     * @property router $router
      */
 
     /**

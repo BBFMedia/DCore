@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @var Registry $registry
+ */
  global $registry;
 
    define ('__ROOT_PATH',dirname(__FILE__).'/' );
