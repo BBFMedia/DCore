@@ -36,6 +36,7 @@ DCore::setPathOfAlias('lib', __FRAMEWORK_PATH);
 DCore::setPathOfAlias('DCORE', dirname(__FILE__) . '/');
 DCore::setPathOfAlias('runtime', __PROTECTED_PATH . '/runtime/');
 DCore::setPathOfAlias('app', __PROTECTED_PATH . '/');
+DCore::setPathOfAlias('root', __ROOT_PATH . '/');
 
 // base functions
 require_once __FRAMEWORK_PATH . 'base.php';
