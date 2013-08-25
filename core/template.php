@@ -188,7 +188,7 @@ Class template extends baseClass {
                 if ($path) {
                     $twig = new DTwig();
                     $twig->init();
-                     $twig->render($path, $this, $vars);
+                    $twig->render($path, $this, $vars);
                     unset($twig);
                 } else {
                     $path = DCore::getFilePAth($view, 'views', $this->view_type);
@@ -256,9 +256,10 @@ Class template extends baseClass {
     }
 
     function renderCSS($build = 0) {
+        global $CONFIG;
         $result = '';
         $dir = trim(URL_ROOT . 'assets', '/');
-        if ($this->registry->debugMode) {
+        if (($this->registry->debugMode) || (!$CONFIG['miniCss'])) {
 
             foreach ($this->CSSFiles as $css) {
                 $result .= "<link rel='stylesheet' type='text/css' href='" . DCore::ExpandUrl($css['url'], 'css.') . "' " .
@@ -284,8 +285,8 @@ Class template extends baseClass {
     }
 
     function renderJS($build = 0) {
-
-        if ($this->registry->debugMode) {
+        global $CONFIG;
+        if (($this->registry->debugMode )|| (!$CONFIG['miniCss'])) {
 
             foreach ($this->JSFiles as $script) {
 

@@ -119,7 +119,7 @@ class DCore {
      * @return string  a local system file path
      *
      */
-    function getFilePath($namespace, $type = '', $view_type = 'default', $ext = self::CLASS_FILE_EXT, $throwEx = true) {
+    static function getFilePath($namespace, $type = '', $view_type = 'default', $ext = self::CLASS_FILE_EXT, $throwEx = true) {
         if (DCORE::file_exists(realpath($namespace)))
             return realpath($namespace);
         $view_info = explode(':', $namespace);
