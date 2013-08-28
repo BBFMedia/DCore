@@ -86,7 +86,8 @@ class router extends baseClass {
     function setController($controllerName, $controllerLocal = null) {
 		if ( $controllerLocal == null)
 			 $controllerLocal = $controllerName.':'.$controllerName;
-        $this->Controllers[$controllerName] = $controllerLocal;
+
+        $this->controllers[$controllerName] = $controllerLocal;
     }
 /**
  * Dummy function when not making a REST request
@@ -270,7 +271,7 @@ class router extends baseClass {
 
 
         /*         * * set the file path ** */
-        $setControllerPath = $this->Controllers[$this->controller];
+        $setControllerPath = $this->controllers[$this->controller];
 
 
         if (!empty($setControllerPath)) {

@@ -151,7 +151,7 @@ class DCore {
                 if (!DCORE::file_exists($file))
                     $file = __PROTECTED_PATH . $type . '/' . $view_info[1] . $ext;
 
-                if (DCORE::file_exists($file))
+                  if (DCORE::file_exists($file))
                     return $file;
             }
         }
