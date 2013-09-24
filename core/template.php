@@ -160,7 +160,7 @@ Class template extends baseClass {
         foreach ($this->vars as $key => $value) {
             $$key = $value;
         }
- 
+
         $vars = $vars_data;
         //use the buffer to send out the masterpage
         $views = $this->getView($name, $this->view_type);
