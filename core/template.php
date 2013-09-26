@@ -74,34 +74,27 @@ Class template extends baseClass {
     private $vars = array();
     private $views = array();
     private $CSSFiles = array();
+    private $metaTags = array();
     private $JSFiles = array();
     public $useXHP = true;
 
     /**
-      /**
-     *
+     * /**
      * @constructor
-     *
      * @access public
-     *
      * @return void
-     *
      */
 
     /**
-     *
      * @set undefined vars
-     *
      * @param string $index
-     *
-     * @param mixed $value
-     *
+     * @param mixed  $value
      * @return void
-     *
      */
     public function __get($index) {
         if (isset($this->vars[$index]))
-        return $this->vars[$index];
+            return $this->vars[$index];
+
         return null;
     }
 
@@ -110,7 +103,7 @@ Class template extends baseClass {
     }
 
     function __construct($registry, $options = null) {
-       
+
         $this->vars = array();
         parent::__construct($registry, $options);
         if (isset($options['useXHP']))
@@ -149,6 +142,7 @@ Class template extends baseClass {
 
         if (is_array($view))
             return $view;
+
         return array($view);
 
         return array();
@@ -163,12 +157,12 @@ Class template extends baseClass {
 
         $vars = $vars_data;
         //use the buffer to send out the masterpage
-        $views = $this->getView($name, $this->view_type);
+        $views   = $this->getView($name, $this->view_type);
         $content = '';
 
         if ($cached) {
             if (isset($this->registry->cache)) {
-                $hash = md5(seralize($this->vars));
+                $hash    = md5(seralize($this->vars));
                 $content = $this->registry->cache->get('view_cache_' . $name . $hash);
             }
         }
@@ -188,24 +182,25 @@ Class template extends baseClass {
                     $twig->init();
                     $twig->render($path, $this, $vars);
                     unset($twig);
-                } else {
+                }
+                else {
                     $path = DCore::getFilePAth($view, 'views', $this->view_type);
                     if (file_exists($path) == false) {
                         throw new Exception('Template not found in ' . $path);
+
                         return false;
                     }
 
-
-                    include ($path);
+                    include($path);
                 }
-                    $content .= ob_get_contents();
+                $content .= ob_get_contents();
 
                 ob_end_clean();
             }
 
             if ($cached) {
                 if (isset($this->registry->cache)) {
-                    $hash = md5(seralize($this->vars));
+                    $hash       = md5(seralize($this->vars));
                     $cache_data = $this->registry->cache->set('view_cache_' . $hash, $content, $cached);
                 }
             }
@@ -232,6 +227,7 @@ Class template extends baseClass {
 
         if (isset($subpaths[1]))
             $url = $url . $subpaths[1] . $ext;
+
         //}
         return $url;
     }
@@ -239,7 +235,7 @@ Class template extends baseClass {
     function addJS($filename) {
 
         if (empty($this->JSFiles[$filename])) {
-            $url = $this->getURLForAsset($filename, '.js');
+            $url                      = $this->getURLForAsset($filename, '.js');
             $this->JSFiles[$filename] = $url;
         }
     }
@@ -247,50 +243,67 @@ Class template extends baseClass {
     function addCSS($filename, $media = '') {
 
         if (empty($this->CSSFiles[$filename])) {
-            $url = $this->getURLForAsset($filename, '.css');
-            $this->CSSFiles[$filename]['url'] = $url;
+            $url                                = $this->getURLForAsset($filename, '.css');
+            $this->CSSFiles[$filename]['url']   = $url;
             $this->CSSFiles[$filename]['media'] = $media;
+        }
+    }
+
+    function addMeta($id, $data) {
+
+        if (is_array($id)) {
+            $data = $id;
+            $id   = $id['ref'];
+            if (empty($id))
+                $id = 'ID' . rand();
+        }
+        if (empty($this->metaTags[$id])) {
+
+            $this->metaTags[$id] = $data;
+
         }
     }
 
     function renderCSS($build = 0) {
         global $CONFIG;
         $result = '';
-        $dir = trim(URL_ROOT . 'assets', '/');
+        $dir    = trim(URL_ROOT . 'assets', '/');
         if (($this->registry->debugMode) || (!$CONFIG['miniCss'])) {
 
             foreach ($this->CSSFiles as $css) {
                 $result .= "<link rel='stylesheet' type='text/css' href='" . DCore::ExpandUrl($css['url'], 'css.') . "' " .
-                        (empty($css['media']) ? '' : "media='print' ") . " />";
+                    (empty($css['media']) ? '' : "media='print' ") . " />";
             }
-        } else {
+        }
+        else {
             $minurl = array();
             foreach ($this->CSSFiles as $css) {
                 if (empty($css['media']))
                     $css['media'] = 'screen';
-                $css['url'] = str_replace($dir, '', $css['url']);
+                $css['url']            = str_replace($dir, '', $css['url']);
                 $minurl[$css['media']] = $minurl[$css['media']] . substr($css['url'], 1, 1000) . ',';
             }
 
-
-
             foreach ($minurl as $key => $u) {
                 $result .=
-                        "<link rel='stylesheet' type='text/css' href='" . rtrim(URL_ROOT, '/') . "/min/b=" . $dir . "&amp;f=" . rtrim($u, ',') . "&version=" . $build . "'  media='" . $key . "'  /> ";
+                    "<link rel='stylesheet' type='text/css' href='" . rtrim(URL_ROOT, '/') . "/min/b=" . $dir . "&amp;f=" . rtrim($u, ',') . "&version=" . $build . "'  media='" . $key . "'  /> ";
             }
         }
+
         return $result;
     }
 
     function renderJS($build = 0) {
         global $CONFIG;
-        if (($this->registry->debugMode )|| (!$CONFIG['miniCss'])) {
+        $result = '';
+        if (($this->registry->debugMode) || (!$CONFIG['miniCss'])) {
 
             foreach ($this->JSFiles as $script) {
 
                 $result .= '<script type="text/javascript"  src="' . DCore::ExpandUrl($script, 'js.') . '"></script>';
             }
-        } else {
+        }
+        else {
             $minurl = rtrim(URL_ROOT, '/') . '/min/b=' . $dir . '&amp;f=';
             foreach ($this->JSFiles as $script) {
                 $script = str_replace($dir . '/', '', $script);
@@ -302,4 +315,18 @@ Class template extends baseClass {
         return $result;
     }
 
+    function renderMeta($build = 0) {
+        global $CONFIG;
+
+        $result = '';
+        foreach ($this->metaTags as $tag) {
+            $result .= '<meta ';
+            foreach ($tag as $attr => $value) {
+                $result .= ' ' . $attr . '="' .$value.'" ';
+            }
+            $result .= " /> \n";
+        }
+
+        return $result;
+    }
 }
