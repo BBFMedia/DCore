@@ -6,7 +6,10 @@ class DCms extends baseClass {
     private $variants;
     private $mapping;
     private $language;
+    private $default;
     private $editing = false;
+
+    private $_layers;
     private $_contentScheme;
 
     private $_activeContent;
@@ -31,44 +34,50 @@ class DCms extends baseClass {
 
     }
 
-    function setup($variant_id) {
-        global $registry;
+    private function mergeLayers($layers) {
 
-        $mapping = $this->mapping[$variant_id];
+        $result            = array();
+        $result['content'] = array();
+        $result['meta']    = array();
+        $content           = array();
+        $meta              = array();
 
-        $variant = isset($this->variants[$mapping]) ? $this->variants[$mapping] : $this->variants[$variant_id];
-        $variant = isset($variant) ? $variant : array();
-        if (isset($variant['lang'])) {
-            i18::setLanguage($variant['lang']);
+        foreach ($layers as $layer) {
+            if (isset($layer['content']))
+                $content = array_merge($content, $layer['content']);
+            if (isset($layer['meta']))
+                $meta = array_merge($meta, $layer['meta']);
+
+            $result = array_merge($result, $layer);
         }
-
-        $lang = i18::getLanguage();
-
-        $langObj = isset($this->language[$lang]) ? $this->language[$lang] : array();
-        $default = $this->variants['default'];
-
-        $this->_contentScheme = $this->_id . '!' . $variant_id . '^' . $lang;
-
-        $variant['content'] = isset($variant['content']) ? $variant['content'] : array();
-        $langObj['content'] = isset($langObj['content']) ? $langObj['content'] : array();
-        $default['content'] = isset($default['content']) ? $default['content'] : array();
-
-        $variant['meta'] = isset($variant['meta']) ? $variant['meta'] : array();
-        $langObj['meta'] = isset($langObj['meta']) ? $langObj['meta'] : array();
-        $default['meta'] = isset($default['meta']) ? $default['meta'] : array();
-
-        $content = array_merge($default['content'], $langObj['content']);
-        $content = array_merge($content, $variant['content']);
-
-        $meta = array_merge($default['meta'], $langObj['meta']);
-        $meta = array_merge($meta, $variant['meta']);
-
-        $result = array_merge($default, $langObj);
-        $result = array_merge($result, $variant);
-
         $result['content'] = $content;
         $result['meta']    = $meta;
 
+        return $result;
+    }
+
+    function setup($variant_id) {
+
+        $this->_layers = array();
+        $mapping       = $this->mapping[$variant_id];
+
+        $variant = isset($this->variants[$mapping]) ? $this->variants[$mapping] : $this->variants[$variant_id];
+        $variant = isset($variant) ? $variant : null;
+        if ($variant) {
+            $this->_layers[] = $variant;
+            if (isset($variant['lang'])) {
+                i18::setLanguage($variant['lang']);
+            }
+        }
+        $lang = i18::getLanguage();
+
+        $langObj = isset($this->language[$lang]) ? $this->language[$lang] : null;
+        if ($langObj)
+        $this->_layers[] = $langObj;
+        $this->_layers[] = $this->default;
+
+        $this->_contentScheme = $this->_id . '!' . $variant_id . '^' . $lang;
+        $result = $this->mergeLayers($this->_layers);
         $this->_activeContent = $result;
 
         //set templates
@@ -82,9 +91,18 @@ class DCms extends baseClass {
 
     function load($namespace) {
         $this->_id      = $namespace;
-        $this->variants = json_decode(file_get_contents(DCore::getFilePath('root:api/' . $this->_filename['variants'], '', '', '.json')), true);
-        $this->mapping  = json_decode(file_get_contents(DCore::getFilePath('root:api/' . $this->_filename['mapping'], '', '', '.json')), true);
-        $this->language = json_decode(file_get_contents(DCore::getFilePath('root:api/' . $this->_filename['language'], '', '', '.json')), true);
+
+        // todo:
+        // get from mongo
+        // if version is different than remote then on file then load.
+        // this could be slow because it has to check everytime it loads.
+        // though I do think this should all be cached
+
+        $data           = json_decode(file_get_contents(DCore::getFilePath($namespace, 'data', '', '.json')), true);
+        $this->variants = $data['variants'];
+        $this->mapping  = $data['mapping'];
+        $this->language = $data['language'];
+        $this->default  = $data['default'];
 
     }
 
