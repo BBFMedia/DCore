@@ -41,7 +41,7 @@ class DCms extends baseClass {
         $result['meta']    = array();
         $content           = array();
         $meta              = array();
-
+        $layers = array_reverse($layers);
         foreach ($layers as $layer) {
             if (isset($layer['content']))
                 $content = array_merge($content, $layer['content']);
