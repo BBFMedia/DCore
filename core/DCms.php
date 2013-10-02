@@ -100,7 +100,7 @@ class DCms extends baseClass {
 
         $data           = json_decode(file_get_contents(DCore::getFilePath($namespace, 'data', '', '.json')), true);
         $this->variants = $data['variants'];
-        $this->mapping  = $data['mapping'];
+        $this->mapping  = $data['mappings'];
         $this->language = $data['language'];
         $this->default  = $data['default'];
 
