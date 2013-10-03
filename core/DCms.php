@@ -98,7 +98,7 @@ class DCms extends baseClass {
         // this could be slow because it has to check everytime it loads.
         // though I do think this should all be cached
 
-        $data           = json_decode(file_get_contents(DCore::getFilePath($namespace, 'data', '', '.json')), true);
+        $data           = json_decode(file_get_contents(DCore::getFilePath($namespace, 'config', '', '.json')), true);
         $this->variants = $data['variants'];
         $this->mapping  = $data['mappings'];
         $this->language = $data['language'];
