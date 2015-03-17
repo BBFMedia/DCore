@@ -1,16 +1,6 @@
 <?php
 
 /**
- * cache class file
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @link http://www.pradosoft.com/
- * @copyright Copyright &copy; 2005-2011 PradoSoft
- * @license http://www.pradosoft.com/license/
- * @package DCore.cache
- */
-
-/**
  * cache class
  *
  *  used from Prado. xeixei ni Qiang Xue.
